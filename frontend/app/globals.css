@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --primary: #6d28d9;
+  --accent: #2563eb;
+  --secondary: #f8fafc;
+  --border: #e2e8f0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-secondary: var(--secondary);
+  --color-border: var(--border);
+  --font-montserrat: var(--font-montserrat);
+  --font-inter: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-montserrat), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
