@@ -13,6 +13,8 @@ export const getProducts = async (req: Request, res: Response) => {
             minPrice,
             maxPrice,
             featured,
+            topSeller,
+            trending,
             sort = '-createdAt'
         } = req.query;
 
@@ -38,6 +40,16 @@ export const getProducts = async (req: Request, res: Response) => {
         // Featured filter
         if (featured === 'true') {
             query.featured = true;
+        }
+
+        // Top Seller filter
+        if (topSeller === 'true') {
+            query.topSeller = true;
+        }
+
+        // Trending filter
+        if (trending === 'true') {
+            query.trending = true;
         }
 
         const skip = (Number(page) - 1) * Number(limit);

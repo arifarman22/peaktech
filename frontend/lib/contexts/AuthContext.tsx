@@ -32,6 +32,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const fetchUser = async () => {
         try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+            
             const res = await apiFetch('/auth/me');
             if (res.ok) {
                 const data = await res.json();
@@ -39,7 +45,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     setUser(data.data.user);
                 }
             } else if (res.status === 401) {
-                // Clear token if invalid
                 localStorage.removeItem('accessToken');
                 setUser(null);
             }

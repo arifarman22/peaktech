@@ -21,36 +21,34 @@ export const register = async (req: Request, res: Response) => {
 
         const { name, email, password } = validated.data;
 
-        // Check if user exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            if (existingUser.emailVerified) {
-                return res.status(400).json(errorResponse('User already exists'));
-            }
-            // If exists but not verified, resend OTP
-            const otp = generateOTP();
-            existingUser.otp = otp;
-            existingUser.otpExpiry = generateOTPExpiry();
-            await existingUser.save();
-            await sendOTPEmail(email, otp);
-            return res.json(successResponse(null, 'Verification OTP sent to your email'));
+            return res.status(400).json(errorResponse('User already exists'));
         }
 
-        // Create new user
         const hashedPassword = await hashPassword(password);
-        const otp = generateOTP();
 
-        await User.create({
+        const user = await User.create({
             name,
             email,
             password: hashedPassword,
-            otp,
-            otpExpiry: generateOTPExpiry(),
+            emailVerified: true,
         });
 
-        await sendOTPEmail(email, otp);
+        const tokenPayload = { userId: user._id.toString(), email: user.email, role: user.role };
+        const accessToken = generateAccessToken(tokenPayload);
+        const refreshToken = generateRefreshToken(tokenPayload);
 
-        return res.status(201).json(successResponse(null, 'User registered. Please verify your email.'));
+        return res.status(201).json(successResponse({
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+            accessToken,
+            refreshToken
+        }, 'User registered successfully'));
     } catch (error) {
         console.error('Register error:', error);
         return res.status(500).json(errorResponse('Internal server error'));
@@ -132,10 +130,6 @@ export const login = async (req: Request, res: Response) => {
 
         const user = await User.findOne({ email }).select('+password');
         if (!user) return res.status(401).json(errorResponse('Invalid credentials'));
-
-        if (!user.emailVerified) {
-            return res.status(403).json(errorResponse('Email not verified'));
-        }
 
         if (!user.password) return res.status(401).json(errorResponse('Invalid credentials'));
 

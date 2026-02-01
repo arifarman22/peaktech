@@ -4,171 +4,405 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/utils/api";
-import CategorySlider from "@/components/CategorySlider";
-import BannerSlider from "@/components/BannerSlider";
 import Footer from "@/components/Footer";
+import QuickViewModal from "@/components/QuickViewModal";
+import BannerSlider from "@/components/BannerSlider";
+import CategorySlider from "@/components/CategorySlider";
 
 interface Product {
   _id: string;
   name: string;
   slug: string;
   price: number;
+  compareAtPrice?: number;
   images: string[];
-  category: { name: string };
+  category: { _id: string; name: string; slug: string };
+  description: string;
+  quantity: number;
+  sizes?: string[];
 }
 
-const SAMPLE_PRODUCTS: Product[] = [
-  { _id: '1', name: 'Ultra-HD Drone with 4K Camera', slug: 'hd-drone', price: 1299, images: ['https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&q=80&w=800'], category: { name: 'Drones' } },
-  { _id: '2', name: 'Premium Matcha Green Tea', slug: 'matcha-tea', price: 45, images: ['https://images.unsplash.com/photo-1582793988951-9aed5509eb97?auto=format&fit=crop&q=80&w=800'], category: { name: 'Tea' } },
-  { _id: '3', name: 'Smart Noise Cancelling Headphones', slug: 'headphones', price: 350, images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800'], category: { name: 'Electronics' } },
-  { _id: '4', name: 'Mechanical Industrial Drill', slug: 'industrial-drill', price: 4500, images: ['https://images.unsplash.com/photo-1504917595217-d4dc5f6497d7?auto=format&fit=crop&q=80&w=800'], category: { name: 'Machinery' } },
-  { _id: '5', name: 'Organic Chinese Dry Dates', slug: 'dry-dates', price: 25, images: ['https://images.unsplash.com/photo-1593026848149-53b922116315?auto=format&fit=crop&q=80&w=800'], category: { name: 'Chinese Dry Foods' } },
-];
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+}
 
 export default function Home() {
-  const [trending, setTrending] = useState<Product[]>(SAMPLE_PRODUCTS);
-  const [topSelling, setTopSelling] = useState<Product[]>(SAMPLE_PRODUCTS.slice(0, 3));
+  const [products, setProducts] = useState<Product[]>([]);
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+  const [bestSellers, setBestSellers] = useState<Product[]>([]);
+  const [topRated, setTopRated] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'trending' | 'best-sellers'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
 
   useEffect(() => {
-    const fetchHomeData = async () => {
-      try {
-        const res = await apiFetch('/products?featured=true&limit=8');
-        const data = await res.json();
-        if (data.success && data.data.products.length > 0) {
-          setTrending(data.data.products);
-        }
-      } catch (error) {
-        console.log("Using sample data - API not available");
-      }
-    };
-    fetchHomeData();
+    fetchCategories();
+    fetchTrending();
+    fetchBestSellers();
+    fetchTopRated();
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [selectedFilter, selectedCategory, priceRange]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await apiFetch('/categories');
+      const data = await res.json();
+      if (data.success) setCategories(data.data);
+    } catch (error) {
+      console.log("Error fetching categories");
+    }
+  };
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      let url = '/products?limit=24';
+      if (selectedFilter === 'trending') url += '&trending=true';
+      if (selectedFilter === 'best-sellers') url += '&topSeller=true';
+      if (selectedCategory) url += `&category=${selectedCategory}`;
+
+      const res = await apiFetch(url);
+      const data = await res.json();
+      if (data.success) {
+        const filtered = data.data.products.filter((p: Product) =>
+          p.price >= priceRange[0] && p.price <= priceRange[1]
+        );
+        setProducts(filtered);
+      }
+    } catch (error) {
+      console.log("Error fetching products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchTrending = async () => {
+    try {
+      const res = await apiFetch('/products?trending=true&limit=8');
+      const data = await res.json();
+      if (data.success) setTrendingProducts(data.data.products);
+    } catch (error) {
+      console.log("Error fetching trending");
+    }
+  };
+
+  const fetchBestSellers = async () => {
+    try {
+      const res = await apiFetch('/products?topSeller=true&limit=8');
+      const data = await res.json();
+      if (data.success) setBestSellers(data.data.products);
+    } catch (error) {
+      console.log("Error fetching best sellers");
+    }
+  };
+
+  const fetchTopRated = async () => {
+    try {
+      const res = await apiFetch('/products?featured=true&limit=8');
+      const data = await res.json();
+      if (data.success) setTopRated(data.data.products);
+    } catch (error) {
+      console.log("Error fetching top rated");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      {/* Slider Hero */}
-      <div className="pt-24 lg:pt-0">
+      <main className="pt-0">
         <BannerSlider />
-      </div>
 
-      {/* Why PeakTech Section */}
-      <section className="py-24 bg-gray-50/50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-            <div className="flex gap-6 items-start">
-              <span className="text-4xl">🚀</span>
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-3 text-black">Priority Shipping</h3>
-                <p className="text-gray-500 text-sm font-medium">Free global delivery on all premium orders over $500.</p>
-              </div>
-            </div>
-            <div className="flex gap-6 items-start">
-              <span className="text-4xl">🔐</span>
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-3 text-black">Secure Payments</h3>
-                <p className="text-gray-500 text-sm font-medium">Fully encrypted transactions and data protection.</p>
-              </div>
-            </div>
-            <div className="flex gap-6 items-start">
-              <span className="text-4xl">💎</span>
-              <div>
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-3 text-black">Authentic Gear</h3>
-                <p className="text-gray-500 text-sm font-medium">100% genuine products with manufacturer warranty.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        <CategorySlider />
 
-      {/* Moving Category Slider */}
-      <CategorySlider />
-
-      {/* Trending Products */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-end mb-16">
-            <div>
-              <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-4 tracking-tighter">New Arrivals</h2>
-              <p className="text-gray-400 font-bold uppercase text-[10px] tracking-[0.3em]">Latest from our global warehouse</p>
-            </div>
-            <Link href="/shop" className="text-black font-black uppercase text-[10px] tracking-widest hover:mr-2 transition-all border-b-2 border-black pb-1">Explore Shop →</Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {trending.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="py-32 bg-secondary flex items-center justify-center overflow-hidden relative border-y border-gray-100">
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none text-[300px] font-black tracking-tighter select-none flex items-center justify-center whitespace-nowrap">
-          PEAKTECH CIRCLE
-        </div>
-        <div className="max-w-2xl mx-auto px-6 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 leading-tight">BE THE FIRST TO KNOW <br /><span className="text-gray-300">GET THE EDGE</span></h2>
-          <form className="flex flex-col sm:flex-row gap-4">
-            <input
-              type="email"
-              placeholder="YOUR@EMAIL.COM"
-              className="flex-grow bg-white border border-gray-100 rounded-full py-5 px-10 text-xs font-black outline-none shadow-sm focus:ring-2 focus:ring-black/5"
-            />
-            <button className="bg-black text-white px-10 py-5 rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition shadow-2xl active:scale-95">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Top Selling Products */}
-      <section className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-black text-center text-gray-900 mb-24 leading-tight">THE <br /><span className="text-gray-300 font-outline">TOP SELLERS</span></h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            {topSelling.map((product) => (
-              <Link key={product._id} href={`/products/${product.slug}`} className="group relative">
-                <div className="aspect-[4/5] bg-gray-50 rounded-[3rem] overflow-hidden hover:shadow-2xl transition duration-500 mb-10 p-12 flex items-center justify-center">
-                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain group-hover:scale-110 transition duration-500" />
+        {/* Section: Trending */}
+        {trendingProducts.length > 0 && (
+          <section className="py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-8">
+              <div className="flex items-end justify-between mb-12">
+                <div className="max-w-md">
+                  <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 mb-4">Trending Now</h2>
+                  <p className="text-zinc-500 font-medium">Discover the most sought-after products define current tech culture.</p>
                 </div>
-                <div className="px-4 text-center sm:text-left">
-                  <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest mb-3">{product.category.name}</p>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-black transition">{product.name}</h4>
-                  <p className="text-3xl font-black text-gray-900">${product.price}</p>
-                </div>
-              </Link>
-            ))}
+                <Link href="/shop?trending=true" className="group flex items-center gap-2 text-indigo-600 font-bold text-sm tracking-widest uppercase pb-1 border-b-2 border-indigo-600/10 hover:border-indigo-600 transition-all">
+                  View Curated List
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                {trendingProducts.slice(0, 4).map((product) => (
+                  <ProductCard key={product._id} product={product} onQuickView={setQuickViewProduct} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Section: Feature Banner */}
+        <section className="py-12">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="relative h-[400px] rounded-[32px] overflow-hidden bg-zinc-900">
+              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000')] bg-cover bg-center opacity-40 grayscale" />
+              <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent z-10" />
+              <div className="relative z-20 h-full flex flex-col justify-center px-12 md:px-20 max-w-2xl">
+                <span className="text-indigo-400 font-black uppercase tracking-[0.2em] text-[10px] mb-6">Expertise Defined</span>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">PRECISION PARTS FOR INDUSTRIAL CRAFT.</h2>
+                <p className="text-zinc-400 text-lg mb-10 font-medium font-inter">We engineering solutions that power high-performance machinery across global industries.</p>
+                <Link href="/shop?category=machinery" className="inline-flex h-14 items-center justify-center px-10 rounded-2xl bg-white text-zinc-950 font-black text-xs uppercase tracking-widest hover:bg-zinc-100 transition-all w-fit">
+                  Explore Machinery
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Section: Best Sellers */}
+        {bestSellers.length > 0 && (
+          <section className="py-24 bg-zinc-50/50">
+            <div className="max-w-7xl mx-auto px-8">
+              <div className="flex items-end justify-between mb-12">
+                <div className="max-w-md">
+                  <h2 className="text-4xl font-extrabold tracking-tight text-zinc-900 mb-4">Elite Best Sellers</h2>
+                  <p className="text-zinc-500 font-medium">The definitive collection of our most reliable and high-performance essentials.</p>
+                </div>
+                <Link href="/shop?topSeller=true" className="group flex items-center gap-2 text-zinc-900 font-bold text-sm tracking-widest uppercase pb-1 border-b-2 border-zinc-900/10 hover:border-zinc-900 transition-all">
+                  Show All
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                {bestSellers.slice(0, 4).map((product) => (
+                  <ProductCard key={product._id} product={product} onQuickView={setQuickViewProduct} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Section: Philosophy */}
+        <section className="py-32 bg-white">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+              {[
+                { title: "DIGITAL MASTERY", desc: "Curating only the most sophisticated electronic components that define the modern landscape.", icon: "M12 2v20m10-10H2" },
+                { title: "GLOBAL LOGISTICS", desc: "Our network ensures your high-performance parts reach you with precision and velocity.", icon: "M5 13l4 4L19 7" },
+                { title: "AUTHENTIC CRAFT", desc: "Direct sourcing from artisans ensure the heritage of every product is preserved.", icon: "M13 10V3L4 14h7v7l9-11h-7z" }
+              ].map((item, i) => (
+                <div key={i} className="group">
+                  <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-indigo-600 transition-colors duration-500">
+                    <svg className="w-6 h-6 text-indigo-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                    </svg>
+                  </div>
+                  <h3 className="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-400 mb-6 group-hover:text-zinc-900 transition-colors">{item.title}</h3>
+                  <p className="text-zinc-500 font-medium leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Main Explore */}
+        <section className="py-24 border-t border-zinc-100">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="mb-16 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-zinc-900">Curated Explorer</h2>
+              <div className="flex gap-4">
+                <div className="h-px w-32 bg-zinc-100 mt-3 hidden md:block" />
+                <p className="text-sm font-medium text-zinc-400">{products.length} Items Indexed</p>
+              </div>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-16">
+              <aside className="lg:w-72 flex-shrink-0">
+                <div className="sticky top-40 space-y-12 p-10 rounded-[40px] bg-zinc-950 border border-white/5 shadow-2xl">
+                  <div>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-8">Categories</h3>
+                    <div className="space-y-2">
+                      <FilterButton
+                        active={selectedFilter === 'all' && !selectedCategory}
+                        onClick={() => { setSelectedFilter('all'); setSelectedCategory(''); }}
+                      >
+                        All Indices
+                      </FilterButton>
+                      <FilterButton
+                        active={selectedFilter === 'trending'}
+                        onClick={() => { setSelectedFilter('trending'); setSelectedCategory(''); }}
+                      >
+                        Trending Now
+                      </FilterButton>
+                      <FilterButton
+                        active={selectedFilter === 'best-sellers'}
+                        onClick={() => { setSelectedFilter('best-sellers'); setSelectedCategory(''); }}
+                      >
+                        Best Sellers
+                      </FilterButton>
+                      <div className="h-4" />
+                      {categories.map((cat) => (
+                        <FilterButton
+                          key={cat._id}
+                          active={selectedCategory === cat._id}
+                          onClick={() => { setSelectedFilter('all'); setSelectedCategory(cat._id); }}
+                        >
+                          {cat.name}
+                        </FilterButton>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-8">Price Range</h3>
+                    <div className="space-y-1">
+                      {[
+                        { label: 'All Spectrum', range: [0, 100000] },
+                        { label: '৳0 - ৳5,000', range: [0, 5000] },
+                        { label: '৳5,000 - ৳20,000', range: [5000, 20000] },
+                        { label: '৳20,000+', range: [20000, 100000] }
+                      ].map((p, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setPriceRange(p.range as [number, number])}
+                          className={`block w-full text-left px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${priceRange[0] === p.range[0] && priceRange[1] === p.range[1]
+                            ? 'bg-white text-zinc-950 shadow-lg shadow-white/5 scale-[1.02]'
+                            : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                            }`}
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </aside>
+              <div className="flex-1">
+                {loading ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="animate-pulse">
+                        <div className="aspect-square bg-zinc-100 rounded-3xl mb-6" />
+                        <div className="h-4 bg-zinc-100 rounded w-1/3 mb-4" />
+                        <div className="h-6 bg-zinc-100 rounded w-2/3" />
+                      </div>
+                    ))}
+                  </div>
+                ) : products.length === 0 ? (
+                  <div className="h-[400px] flex items-center justify-center border-2 border-dashed border-zinc-100 rounded-[32px]">
+                    <p className="text-zinc-400 font-bold uppercase tracking-widest text-xs">No products found in this spectrum</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                    {products.map((product) => (
+                      <ProductCard key={product._id} product={product} onQuickView={setQuickViewProduct} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
+      {quickViewProduct && <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />}
     </div>
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function FilterButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <Link href={`/products/${product.slug}`} className="group flex flex-col">
-      <div className="relative aspect-square bg-gray-50 rounded-[2.5rem] p-8 overflow-hidden hover:shadow-2xl transition-all duration-500 mb-6 flex items-center justify-center">
-        <img
-          src={product.images[0]}
-          alt={product.name}
-          className="w-full h-full object-contain group-hover:scale-110 transition duration-500"
-        />
-        <div className="absolute bottom-6 right-6 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition translate-y-4 group-hover:translate-y-0 duration-300 shadow-xl">
-          <span className="text-xl">+</span>
+    <button
+      onClick={onClick}
+      className={`block w-full text-left px-4 py-3 rounded-xl transition-all text-[10px] font-black uppercase tracking-[0.2em] ${active
+        ? 'bg-white text-zinc-950 shadow-lg shadow-white/5 scale-[1.02]'
+        : 'text-zinc-500 hover:text-white hover:bg-white/5'
+        }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ProductCard({ product, onQuickView }: { product: Product; onQuickView: (product: Product) => void }) {
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
+  const toggleWishlist = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      if (isInWishlist) {
+        await apiFetch(`/wishlist/${product._id}`, { method: 'DELETE' });
+        setIsInWishlist(false);
+      } else {
+        await apiFetch('/wishlist', { method: 'POST', body: JSON.stringify({ productId: product._id }) });
+        setIsInWishlist(true);
+      }
+    } catch (error) {
+      console.error('Wishlist error:', error);
+    }
+  };
+
+  return (
+    <div className="group">
+      <div className="relative aspect-square rounded-[32px] overflow-hidden bg-zinc-100 mb-6 transform transition-all duration-700 group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] group-hover:-translate-y-2">
+        <Link href={`/products/${product.slug}`} className="block h-full w-full">
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="w-full h-full object-cover transform transition-transform duration-[2000ms] group-hover:scale-110"
+          />
+        </Link>
+        <div className="absolute top-6 right-6 flex flex-col gap-3">
+          <button
+            onClick={toggleWishlist}
+            className="w-12 h-12 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl hover:bg-white active:scale-90"
+          >
+            <svg className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-zinc-900'}`} fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
+          <button
+            onClick={(e) => { e.preventDefault(); onQuickView(product); }}
+            className="w-12 h-12 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 delay-75 shadow-xl hover:bg-indigo-600 hover:text-white active:scale-90"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+        </div>
+        {product.compareAtPrice && product.compareAtPrice > product.price && (
+          <div className="absolute bottom-6 left-6 font-black text-[10px] bg-red-500 text-white px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+            -{Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
+          </div>
+        )}
+      </div>
+      <div className="px-2">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{product.category.name}</span>
+          <div className="h-px flex-grow bg-zinc-50" />
+        </div>
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="font-bold text-zinc-900 mb-3 line-clamp-2 hover:text-indigo-600 transition-colors duration-300 h-10">{product.name}</h3>
+        </Link>
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-black text-zinc-900">৳{product.price.toLocaleString()}</span>
+            {product.compareAtPrice && product.compareAtPrice > product.price && (
+              <span className="text-xs text-zinc-400 line-through font-bold">৳{product.compareAtPrice.toLocaleString()}</span>
+            )}
+          </div>
+          <button className="text-[10px] font-black uppercase tracking-widest text-zinc-300 hover:text-indigo-600 transition-colors">Details →</button>
         </div>
       </div>
-      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">{product.category.name}</p>
-      <h3 className="font-bold text-gray-900 group-hover:text-black transition line-clamp-2 min-h-[3rem] text-lg">{product.name}</h3>
-      <div className="mt-2 flex items-center gap-3">
-        <span className="text-2xl font-black text-gray-900">${product.price}</span>
-      </div>
-    </Link>
+    </div>
   );
 }

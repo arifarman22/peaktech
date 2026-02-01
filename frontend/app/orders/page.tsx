@@ -1,134 +1,151 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import api from '@/lib/utils/api';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
-import { apiFetch } from '@/lib/utils/api';
 
 interface Order {
-    _id: string;
-    orderNumber: string;
-    total: number;
-    orderStatus: string;
-    paymentStatus: string;
-    createdAt: string;
-    items: Array<{
-        name: string;
-        quantity: number;
-        price: number;
-        image: string;
-    }>;
+  _id: string;
+  orderNumber: string;
+  items: Array<{
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+  }>;
+  total: number;
+  status: string;
+  createdAt: string;
 }
 
 export default function OrdersPage() {
-    const { user, loading: authLoading } = useAuth();
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (!authLoading && user) {
-            fetchOrders();
-        } else if (!authLoading && !user) {
-            setLoading(false);
-        }
-    }, [user, authLoading]);
-
-    const fetchOrders = async () => {
-        try {
-            const res = await apiFetch('/orders');
-            const data = await res.json();
-            if (data.success) {
-                setOrders(data.data.orders);
-            }
-        } catch (error) {
-            toast.error('Failed to load orders');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading || authLoading) return <div className="min-h-screen bg-gray-50"><Navbar /><div className="p-20 text-center">Loading your orders...</div></div>;
-
+  useEffect(() => {
     if (!user) {
-        return (
-            <div className="min-h-screen bg-gray-50">
-                <Navbar />
-                <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-                    <h1 className="text-3xl font-bold mb-4">Your Orders</h1>
-                    <p className="text-gray-600 mb-8">Please login to view your order history.</p>
-                    <Link href="/login" className="px-8 py-4 bg-purple-600 text-white rounded-2xl font-bold hover:bg-purple-700 transition">Login Now</Link>
-                </div>
-            </div>
-        );
+      router.push('/login');
+      return;
     }
+    fetchOrders();
+  }, [user]);
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            <Navbar />
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <h1 className="text-4xl font-black text-gray-900 mb-10">Order History</h1>
+  const fetchOrders = async () => {
+    try {
+      const res = await api.get('/orders');
+      setOrders(res.data?.orders || []);
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                {orders.length === 0 ? (
-                    <div className="bg-white rounded-3xl p-16 text-center shadow-sm">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">No orders yet</h2>
-                        <p className="text-gray-600 mb-8">You haven't placed any orders with us yet.</p>
-                        <Link href="/shop" className="px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 transition">Start Shopping</Link>
-                    </div>
-                ) : (
-                    <div className="space-y-8">
-                        {orders.map((order) => (
-                            <div key={order._id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                                <div className="bg-gray-50 p-6 flex flex-wrap justify-between items-center gap-4">
-                                    <div className="flex gap-8">
-                                        <div>
-                                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Order Placed</p>
-                                            <p className="font-bold text-gray-900">{new Date(order.createdAt).toLocaleDateString()}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total</p>
-                                            <p className="font-bold text-gray-900">${order.total.toFixed(2)}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Status</p>
-                                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-black uppercase ${order.orderStatus === 'completed' ? 'bg-green-100 text-green-600' :
-                                                    order.orderStatus === 'cancelled' ? 'bg-red-100 text-red-600' :
-                                                        'bg-blue-100 text-blue-600'
-                                                }`}>
-                                                {order.orderStatus}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Order #</p>
-                                        <p className="font-mono text-gray-900">{order.orderNumber}</p>
-                                    </div>
-                                </div>
-                                <div className="p-6">
-                                    <div className="space-y-6">
-                                        {order.items.map((item, idx) => (
-                                            <div key={idx} className="flex items-center gap-6">
-                                                <div className="w-16 h-16 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center p-2 border border-gray-100">
-                                                    {item.image ? (
-                                                        <img src={item.image} alt={item.name} className="max-w-full max-h-full object-contain" />
-                                                    ) : (
-                                                        <span className="text-2xl">📦</span>
-                                                    )}
-                                                </div>
-                                                <div className="flex-grow">
-                                                    <h4 className="font-bold text-gray-900">{item.name}</h4>
-                                                    <p className="text-gray-500 text-sm">Qty: {item.quantity} · ${item.price.toFixed(2)}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+  const deleteOrder = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this record?')) return;
+
+    try {
+      await api.delete(`/orders/${id}`);
+      setOrders(orders.filter(o => o._id !== id));
+    } catch (error: any) {
+      alert(error.response?.data?.message || 'Failed to delete record');
+    }
+  };
+
+  if (loading) return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <Navbar />
+      <div className="flex-grow flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400">Syncing Archives</span>
         </div>
-    );
+      </div>
+      <Footer />
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      <main className="max-w-7xl mx-auto px-8 py-40">
+        <div className="flex flex-col gap-16">
+          <div className="border-b border-zinc-100 pb-12">
+            <span className="text-zinc-400 font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Central Repository</span>
+            <h1 className="text-5xl md:text-7xl font-black text-zinc-950 tracking-tighter mb-0 italic uppercase">Logistics.</h1>
+          </div>
+
+          {orders.length === 0 ? (
+            <div className="p-32 bg-zinc-50 rounded-[48px] text-center border-2 border-dashed border-zinc-100">
+              <span className="text-6xl mb-8 block grayscale opacity-30">📂</span>
+              <h3 className="text-xl font-black mb-4 italic">No acquisitions found.</h3>
+              <Link href="/shop" className="inline-block px-10 py-5 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-900 transition-all">Start Collection</Link>
+            </div>
+          ) : (
+            <div className="space-y-10">
+              {orders.map((order) => (
+                <div key={order._id} className="group relative bg-white border border-zinc-100 rounded-[48px] overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.05)] hover:-translate-y-1">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-10 bg-zinc-50/50 border-b border-zinc-100">
+                    <div>
+                      <h3 className="font-black text-xl italic mb-2">{order.orderNumber}</h3>
+                      <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Logged on {new Date(order.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="mt-4 md:mt-0">
+                      <span className={`px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border ${order.status === 'Pending' ? 'bg-amber-100 text-amber-700 border-amber-200' :
+                          order.status === 'Processing' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' :
+                            order.status === 'Shipped' ? 'bg-purple-100 text-purple-700 border-purple-200' :
+                              order.status === 'Delivered' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
+                                'bg-red-100 text-red-700 border-red-200'
+                        }`}>
+                        {order.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-10 space-y-8">
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-8">
+                        <div className="w-24 h-24 bg-zinc-50 rounded-3xl flex-shrink-0 flex items-center justify-center p-4 border border-zinc-100 group-hover:bg-white transition-colors duration-500">
+                          <img src={item.image} alt={item.name} className="max-h-full max-w-full object-cover rounded-xl" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-black text-zinc-950 mb-1 leading-tight">{item.name}</p>
+                          <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Unit Grid: {item.quantity} × ৳{item.price.toLocaleString()}</p>
+                        </div>
+                        <p className="font-black text-lg tabular-nums text-zinc-950">৳{(item.price * item.quantity).toLocaleString()}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row justify-between items-center px-10 py-10 bg-zinc-50/50 border-t border-zinc-100">
+                    <div className="flex items-end gap-2 mb-6 sm:mb-0">
+                      <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Asset Value</span>
+                      <p className="text-3xl font-black italic tabular-nums">৳{order.total.toLocaleString()}</p>
+                    </div>
+                    {order.status === 'Pending' && (
+                      <button
+                        onClick={() => deleteOrder(order._id)}
+                        className="px-8 py-4 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-900 transition-all premium-shadow active:scale-95"
+                      >
+                        Abort Order
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }

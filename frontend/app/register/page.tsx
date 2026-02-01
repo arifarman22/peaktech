@@ -1,16 +1,17 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { signIn } from 'next-auth/react';
+import Navbar from '@/components/Navbar';
 
 export default function RegisterPage() {
-    const [step, setStep] = useState<'register' | 'verify'>('register');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
-    const { register, verifyOTP } = useAuth();
+    const { register } = useAuth();
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,8 +19,8 @@ export default function RegisterPage() {
 
         try {
             await register(name, email, password);
-            toast.success('OTP sent to your email!');
-            setStep('verify');
+            toast.success('Account created successfully!');
+            window.location.href = '/';
         } catch (error: any) {
             toast.error(error.message || 'Registration failed');
         } finally {
@@ -27,41 +28,29 @@ export default function RegisterPage() {
         }
     };
 
-    const handleVerify = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-
-        try {
-            await verifyOTP(email, otp);
-            toast.success('Account verified successfully!');
-        } catch (error: any) {
-            toast.error(error.message || 'Verification failed');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-                <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <span className="text-white font-bold text-3xl">P</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        {step === 'register' ? 'Create Account' : 'Verify Email'}
-                    </h1>
-                    <p className="text-gray-600 mt-2">
-                        {step === 'register'
-                            ? 'Join PeakTech today'
-                            : 'Enter the OTP sent to your email'}
-                    </p>
-                </div>
+        <div className="min-h-screen bg-zinc-950 flex flex-col relative overflow-hidden">
+            <Navbar />
 
-                {step === 'register' ? (
-                    <form onSubmit={handleRegister} className="space-y-6">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -mr-64 -mt-64" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] -ml-64 -mb-64" />
+
+            <div className="flex-grow flex items-center justify-center p-6 relative z-10 pt-32 pb-20">
+                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 md:p-16 w-full max-w-xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)]">
+                    <div className="text-center mb-12">
+                        <div className="w-20 h-20 bg-indigo-600 rounded-[28px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-500/20 transform -rotate-12">
+                            <span className="text-white font-black text-4xl">P</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter italic">
+                            JOIN <span className="text-indigo-500">US.</span>
+                        </h1>
+                        <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-[0.3em]">Create your account today</p>
+                    </div>
+
+                    <form onSubmit={handleRegister} className="space-y-8">
+                        <div className="space-y-3">
+                            <label htmlFor="name" className="text-[10px] uppercase font-black text-zinc-400 ml-1 tracking-[0.2em]">
                                 Full Name
                             </label>
                             <input
@@ -69,29 +58,29 @@ export default function RegisterPage() {
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
-                                placeholder="John Doe"
+                                className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-[20px] font-bold text-sm text-white focus:border-indigo-500 focus:bg-white/10 transition-all outline-none placeholder-zinc-700"
+                                placeholder="Commander Shepard"
                                 required
                             />
                         </div>
 
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                                Email
+                        <div className="space-y-3">
+                            <label htmlFor="email" className="text-[10px] uppercase font-black text-zinc-400 ml-1 tracking-[0.2em]">
+                                Email Address
                             </label>
                             <input
                                 id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
-                                placeholder="you@example.com"
+                                className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-[20px] font-bold text-sm text-white focus:border-indigo-500 focus:bg-white/10 transition-all outline-none placeholder-zinc-700"
+                                placeholder="commander@peaktech.com"
                                 required
                             />
                         </div>
 
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                        <div className="space-y-3">
+                            <label htmlFor="password" className="text-[10px] uppercase font-black text-zinc-400 ml-1 tracking-[0.2em]">
                                 Password
                             </label>
                             <input
@@ -99,7 +88,7 @@ export default function RegisterPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition"
+                                className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-[20px] font-bold text-sm text-white focus:border-indigo-500 focus:bg-white/10 transition-all outline-none placeholder-zinc-700"
                                 placeholder="••••••••"
                                 required
                                 minLength={6}
@@ -109,60 +98,26 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-white text-zinc-950 py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] hover:bg-indigo-500 hover:text-white transition-all shadow-xl shadow-white/5 disabled:opacity-50 active:scale-[0.98]"
                         >
-                            {loading ? 'Creating account...' : 'Sign Up'}
+                            {loading ? 'Creating account...' : 'Create Account'}
                         </button>
                     </form>
-                ) : (
-                    <form onSubmit={handleVerify} className="space-y-6">
-                        <div>
-                            <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-2">
-                                6-Digit OTP
-                            </label>
-                            <input
-                                id="otp"
-                                type="text"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none transition text-center text-2xl tracking-widest font-mono"
-                                placeholder="000000"
-                                required
-                                maxLength={6}
-                            />
-                        </div>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? 'Verifying...' : 'Verify Email'}
-                        </button>
+                    <div className="mt-12 text-center text-[10px] font-black uppercase tracking-widest">
+                        <p className="text-zinc-600">
+                            Already have an account?{' '}
+                            <Link href="/login" className="text-indigo-500 hover:text-white transition-colors">
+                                Sign In
+                            </Link>
+                        </p>
+                    </div>
 
-                        <button
-                            type="button"
-                            onClick={() => setStep('register')}
-                            className="w-full py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition"
-                        >
-                            Back to Registration
-                        </button>
-                    </form>
-                )}
-
-                <div className="mt-6 text-center">
-                    <p className="text-gray-600">
-                        Already have an account?{' '}
-                        <Link href="/login" className="text-purple-600 hover:text-purple-700 font-semibold">
-                            Sign in
+                    <div className="mt-8 border-t border-white/5 pt-8 text-center">
+                        <Link href="/" className="text-zinc-700 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-colors">
+                            ← Back to Home
                         </Link>
-                    </p>
-                </div>
-
-                <div className="mt-6">
-                    <Link href="/" className="block text-center text-gray-600 hover:text-gray-900">
-                        ← Back to Home
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>

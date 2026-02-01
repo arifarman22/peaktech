@@ -16,6 +16,8 @@ export interface IProduct extends Document {
     tags?: string[];
     status: 'active' | 'draft' | 'archived';
     featured: boolean;
+    topSeller: boolean;
+    trending: boolean;
     weight?: number;
     dimensions?: {
         length?: number;
@@ -101,6 +103,14 @@ const ProductSchema = new Schema<IProduct>(
             type: Boolean,
             default: false,
         },
+        topSeller: {
+            type: Boolean,
+            default: false,
+        },
+        trending: {
+            type: Boolean,
+            default: false,
+        },
         weight: {
             type: Number,
             min: [0, 'Weight cannot be negative'],
@@ -125,6 +135,8 @@ ProductSchema.index({ slug: 1 });
 ProductSchema.index({ category: 1 });
 ProductSchema.index({ status: 1 });
 ProductSchema.index({ featured: 1 });
+ProductSchema.index({ topSeller: 1 });
+ProductSchema.index({ trending: 1 });
 ProductSchema.index({ name: 'text', description: 'text', tags: 'text' });
 
 const Product: Model<IProduct> =

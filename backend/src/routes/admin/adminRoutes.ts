@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getAdminOrders, updateOrderStatus, getDashboardStats, getCoupons, createCoupon, deleteCoupon } from '../../controllers/adminController';
+import { uploadHandler } from '../../controllers/uploadController';
 import { adminMiddleware } from '../../utils/middleware';
 
 const router = Router();
@@ -13,5 +14,8 @@ router.get('/dashboard', getDashboardStats);
 router.get('/coupons', getCoupons);
 router.post('/coupons', createCoupon);
 router.delete('/coupons/:id', deleteCoupon);
+
+// Generic asset uploads (images, videos, files)
+router.post('/uploads', uploadHandler);
 
 export default router;

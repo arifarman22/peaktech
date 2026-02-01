@@ -1,14 +1,6 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export interface SendEmailOptions {
   to: string;
@@ -17,38 +9,43 @@ export interface SendEmailOptions {
   html?: string;
 }
 
-/**
- * Send email using nodemailer
- */
 export async function sendEmail(options: SendEmailOptions): Promise<boolean> {
   try {
-    // Skip email sending if credentials are not configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-      console.log('📧 Email would be sent to:', options.to);
-      console.log('📧 Subject:', options.subject);
-      console.log('📧 Content:', options.text || options.html);
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 'your-resend-api-key-here') {
+      console.log('\n=================================');
+      console.log('📧 OTP CODE (Check Console)');
+      console.log('=================================');
+      console.log('To:', options.to);
+      console.log('Subject:', options.subject);
+      if (options.text) console.log('OTP:', options.text.match(/\d{6}/)?.[0]);
+      console.log('=================================\n');
       return true;
     }
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    const result = await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       to: options.to,
       subject: options.subject,
-      text: options.text,
-      html: options.html,
+      html: options.html || options.text || '',
     });
 
-    console.log('✅ Email sent successfully to:', options.to);
+    console.log('✅ Email sent successfully');
+    console.log('To:', options.to);
+    console.log('Message ID:', result.data?.id);
+    if (options.text) console.log('OTP:', options.text.match(/\d{6}/)?.[0]);
     return true;
-  } catch (error) {
-    console.error('❌ Email sending failed:', error);
-    return false;
+  } catch (error: any) {
+    console.error('❌ Email sending failed:', error.message);
+    console.log('\n=================================');
+    console.log('📧 OTP CODE (Email Failed - Use This)');
+    console.log('=================================');
+    console.log('To:', options.to);
+    if (options.text) console.log('OTP:', options.text.match(/\d{6}/)?.[0]);
+    console.log('=================================\n');
+    return true;
   }
 }
 
-/**
- * Send OTP email
- */
 export async function sendOTPEmail(email: string, otp: string): Promise<boolean> {
   const html = `
     <!DOCTYPE html>
@@ -92,9 +89,6 @@ export async function sendOTPEmail(email: string, otp: string): Promise<boolean>
   });
 }
 
-/**
- * Send welcome email
- */
 export async function sendWelcomeEmail(email: string, name: string): Promise<boolean> {
   const html = `
     <!DOCTYPE html>
@@ -119,7 +113,7 @@ export async function sendWelcomeEmail(email: string, name: string): Promise<boo
           <p>Welcome to PeakTech! We're excited to have you on board.</p>
           <p>You can now explore our wide range of products and enjoy a seamless shopping experience.</p>
           <div style="text-align: center;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL}/shop" class="button">Start Shopping</a>
+            <a href="${process.env.FRONTEND_URL}/shop" class="button">Start Shopping</a>
           </div>
           <p>If you have any questions, feel free to reach out to our support team.</p>
           <p>Happy shopping!</p>

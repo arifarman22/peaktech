@@ -1,17 +1,11 @@
-import { Inter, Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/contexts/AuthContext";
-import NextAuthContext from "@/lib/contexts/NextAuthContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
@@ -52,12 +46,10 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} ${montserrat.variable} antialiased font-montserrat`}>
+      <body className={`${inter.variable} antialiased font-inter selection:bg-indigo-100 selection:text-indigo-900`}>
         <AuthProvider>
-          <NextAuthContext>
-            {children}
-            <Toaster position="top-right" />
-          </NextAuthContext>
+          {children}
+          <Toaster position="top-right" />
         </AuthProvider>
       </body>
     </html>

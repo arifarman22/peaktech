@@ -4,79 +4,93 @@ import Link from 'next/link';
 
 export default function Footer() {
     return (
-        <footer className="bg-white border-t border-gray-100 pt-24 pb-12">
-            <div className="max-w-7xl mx-auto px-6">
+        <footer className="bg-zinc-950 text-white pt-24 pb-12">
+            <div className="max-w-7xl mx-auto px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
                     {/* Brand Section */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-8 group">
-                            <div className="w-10 h-10 bg-black text-white rounded-2xl flex items-center justify-center font-black text-2xl group-hover:rotate-12 transition duration-500">
+                            <div className="w-10 h-10 bg-indigo-600 text-white rounded-[14px] flex items-center justify-center font-bold text-2xl group-hover:rotate-12 transition duration-500 premium-shadow">
                                 P
                             </div>
-                            <span className="text-2xl font-black tracking-tighter text-black">PeakTech.</span>
+                            <span className="text-2xl font-extrabold tracking-tighter">PeakTech</span>
                         </Link>
-                        <p className="text-gray-500 font-medium leading-relaxed mb-8 max-w-xs">
-                            The definitive destination for premium electronics, industrial parts, and global delicacies. Quality curated for the modern world.
+                        <p className="text-zinc-400 font-medium leading-relaxed mb-10 max-w-xs">
+                            Curating excellence in digital craft, industrial precision, and artisan quality for the discerning global citizen.
                         </p>
                         <div className="flex gap-4">
-                            {['IG', 'TW', 'FB', 'LI'].map((social) => (
-                                <div key={social} className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-[10px] font-black cursor-pointer hover:bg-black hover:text-white transition-all">
-                                    {social}
-                                </div>
+                            {['Instagram', 'Twitter', 'Facebook'].map((social) => (
+                                <Link
+                                    key={social}
+                                    href="#"
+                                    className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-zinc-950 hover:border-white transition-all duration-300"
+                                >
+                                    <span className="sr-only">{social}</span>
+                                    <div className="w-4 h-4 bg-current rounded-sm opacity-20" />
+                                </Link>
                             ))}
                         </div>
                     </div>
 
                     {/* Links - Shop */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-8">Shop</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8">Collections</h4>
                         <ul className="space-y-4">
-                            <li><Link href="/shop?category=electronics" className="text-sm font-bold text-gray-600 hover:text-black transition">Electronics</Link></li>
-                            <li><Link href="/shop?category=machinery" className="text-sm font-bold text-gray-600 hover:text-black transition">Machinery</Link></li>
-                            <li><Link href="/shop?category=toys" className="text-sm font-bold text-gray-600 hover:text-black transition">Collectibles</Link></li>
-                            <li><Link href="/shop?category=tea" className="text-sm font-bold text-gray-600 hover:text-black transition">Tea & Food</Link></li>
+                            <li><FooterLink href="/shop?category=electronics">Electronics</FooterLink></li>
+                            <li><FooterLink href="/shop?category=machinery">Machinery</FooterLink></li>
+                            <li><FooterLink href="/shop?category=toys">Collectibles</FooterLink></li>
+                            <li><FooterLink href="/shop?category=tea">Artisan Tea</FooterLink></li>
                         </ul>
                     </div>
 
                     {/* Links - Support */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-8">Support</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8">Company</h4>
                         <ul className="space-y-4">
-                            <li><Link href="#" className="text-sm font-bold text-gray-600 hover:text-black transition">Order Tracking</Link></li>
-                            <li><Link href="#" className="text-sm font-bold text-gray-600 hover:text-black transition">Returns & Exchanges</Link></li>
-                            <li><Link href="#" className="text-sm font-bold text-gray-600 hover:text-black transition">Shipping Policy</Link></li>
-                            <li><Link href="#" className="text-sm font-bold text-gray-600 hover:text-black transition">Contact Us</Link></li>
+                            <li><FooterLink href="#">Shipping Info</FooterLink></li>
+                            <li><FooterLink href="#">Returns & Exchanges</FooterLink></li>
+                            <li><FooterLink href="#">Security Policy</FooterLink></li>
+                            <li><FooterLink href="#">Contact Us</FooterLink></li>
                         </ul>
                     </div>
 
                     {/* Newsletter */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-8">Stay Ahead</h4>
-                        <p className="text-gray-500 text-sm font-medium mb-6">Join our elite circle for early access and exclusive tech insights.</p>
-                        <form className="relative">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-8">Newsletter</h4>
+                        <p className="text-zinc-400 text-sm font-medium mb-8">Sign up for our newsletter to get the latest updates and offers.</p>
+                        <form className="relative group">
                             <input
                                 type="email"
-                                placeholder="Email address"
-                                className="w-full bg-gray-50 border-none rounded-full py-4 px-6 pr-14 text-sm font-bold outline-none focus:ring-2 focus:ring-black/5 transition"
+                                placeholder="your@email.com"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 px-6 text-sm font-medium outline-none focus:border-indigo-500/50 transition-all placeholder:text-zinc-700"
                             />
-                            <button className="absolute right-2 top-2 bottom-2 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition">
-                                →
+                            <button className="absolute right-2 top-2 bottom-2 px-4 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-all active:scale-95">
+                                Join
                             </button>
                         </form>
                     </div>
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                        © 2026 PEAKTECH ECOMMERCE. BUILT FOR EXCELLENCE.
+                <div className="pt-12 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+                        © 2026 PEAKTECH CORP. BUILT FOR EXCELLENCE.
                     </p>
-                    <div className="flex gap-8">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black cursor-pointer transition">Privacy Policy</span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black cursor-pointer transition">Terms of Service</span>
+                    <div className="flex gap-10">
+                        <Link href="#" className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 hover:text-white transition-colors">Privacy Privacy</Link>
+                        <Link href="#" className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 hover:text-white transition-colors">Terms Conditions</Link>
                     </div>
                 </div>
             </div>
         </footer>
+    );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+    return (
+        <Link href={href} className="text-sm font-semibold text-zinc-400 hover:text-white transition-all flex items-center gap-2 group">
+            <span className="w-0 h-px bg-indigo-500 transition-all duration-300 group-hover:w-4" />
+            {children}
+        </Link>
     );
 }

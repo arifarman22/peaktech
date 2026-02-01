@@ -60,3 +60,14 @@ export const addToCart = async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json(errorResponse('Failed to add to cart'));
     }
 };
+
+export const clearCart = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const userId = req.user?.userId;
+        await Cart.findOneAndUpdate({ user: userId }, { items: [] });
+        return res.json(successResponse(null, 'Cart cleared'));
+    } catch (error) {
+        console.error('Clear cart error:', error);
+        return res.status(500).json(errorResponse('Failed to clear cart'));
+    }
+};

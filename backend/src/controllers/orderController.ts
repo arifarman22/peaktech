@@ -76,3 +76,25 @@ export const getOrders = async (req: AuthenticatedRequest, res: Response) => {
         return res.status(500).json(errorResponse('Failed to fetch orders'));
     }
 };
+
+export const deleteOrder = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const userId = req.user?.userId;
+        const { id } = req.params;
+        
+        const order = await Order.findOne({ _id: id, user: userId });
+        if (!order) {
+            return res.status(404).json(errorResponse('Order not found'));
+        }
+        
+        if (order.orderStatus !== 'pending') {
+            return res.status(400).json(errorResponse('Cannot delete order that is being processed'));
+        }
+        
+        await Order.findByIdAndDelete(id);
+        return res.json(successResponse(null, 'Order deleted successfully'));
+    } catch (error) {
+        console.error('Delete order error:', error);
+        return res.status(500).json(errorResponse('Failed to delete order'));
+    }
+};
