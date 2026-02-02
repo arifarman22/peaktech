@@ -1,12 +1,10 @@
 'use client';
 
-import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Navbar />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
             <div className="max-w-7xl mx-auto px-4 py-32 text-center">
                 <div className="inline-flex items-center justify-center w-24 h-24 bg-purple-100 text-purple-600 rounded-full text-5xl mb-8 font-black">
                     404
@@ -16,10 +14,10 @@ export default function NotFound() {
                     The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
                 </p>
                 <Link
-                    href="/shop"
-                    className="px-12 py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-black text-xl hover:shadow-2xl hover:scale-105 transition active:scale-95"
+                    href="/"
+                    className="inline-block px-12 py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-black text-xl hover:shadow-2xl hover:scale-105 transition active:scale-95"
                 >
-                    Explore Products
+                    Go Home
                 </Link>
             </div>
         </div>

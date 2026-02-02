@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 export default function Error({
@@ -16,8 +15,7 @@ export default function Error({
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Navbar />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
             <div className="max-w-7xl mx-auto px-4 py-32 text-center">
                 <div className="inline-flex items-center justify-center w-24 h-24 bg-red-100 text-red-600 rounded-full text-5xl mb-8">
                     ⚠️
