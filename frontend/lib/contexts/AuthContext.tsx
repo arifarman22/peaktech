@@ -32,6 +32,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const fetchUser = async () => {
         try {
+            if (typeof window === 'undefined') {
+                setLoading(false);
+                return;
+            }
+            
             const token = localStorage.getItem('accessToken');
             if (!token) {
                 setLoading(false);
@@ -71,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             throw new Error(data.error || 'Login failed');
         }
 
-        if (data.data.accessToken) {
+        if (data.data.accessToken && typeof window !== 'undefined') {
             localStorage.setItem('accessToken', data.data.accessToken);
         }
 
@@ -104,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             throw new Error(data.error || 'Verification failed');
         }
 
-        if (data.data.accessToken) {
+        if (data.data.accessToken && typeof window !== 'undefined') {
             localStorage.setItem('accessToken', data.data.accessToken);
         }
 
@@ -120,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const data = await res.json();
         if (data.success) {
-            if (data.data.accessToken) {
+            if (data.data.accessToken && typeof window !== 'undefined') {
                 localStorage.setItem('accessToken', data.data.accessToken);
             }
             setUser(data.data.user);
@@ -131,7 +136,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const logout = async () => {
-        localStorage.removeItem('accessToken');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('accessToken');
+        }
         setUser(null);
         router.push('/');
     };

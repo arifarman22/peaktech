@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { apiFetch } from '@/lib/utils/api';
 
-export default function Navbar() {
+function NavbarContent() {
     const { user, logout } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -16,9 +16,11 @@ export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        if (typeof window !== 'undefined') {
+            const handleScroll = () => setScrolled(window.scrollY > 20);
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+        }
     }, []);
 
     useEffect(() => {
@@ -214,5 +216,28 @@ function MobileNavLink({ href, onClick, children }: { href: string; onClick: () 
         >
             {children}
         </Link>
+    );
+}
+
+export default function Navbar() {
+    return (
+        <Suspense fallback={<NavbarFallback />}>
+            <NavbarContent />
+        </Suspense>
+    );
+}
+
+function NavbarFallback() {
+    return (
+        <nav className="fixed top-8 left-0 right-0 z-50 px-4 md:px-8 py-4">
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-6 md:px-10 py-3 rounded-2xl bg-zinc-950/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]">
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="w-10 h-10 bg-indigo-600 text-white rounded-[14px] flex items-center justify-center font-bold text-xl">
+                        P
+                    </div>
+                    <span className="text-xl font-black tracking-tighter text-white hidden sm:block italic">PeakTech</span>
+                </Link>
+            </div>
+        </nav>
     );
 }
