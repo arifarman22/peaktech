@@ -8,8 +8,6 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { apiFetch } from '@/lib/utils/api';
 
-export const dynamic = 'force-dynamic';
-
 interface CartItem {
     product: {
         _id: string;
