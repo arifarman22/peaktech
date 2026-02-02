@@ -61,12 +61,17 @@ app.use('/api/wishlist', wishlistRoutes);
 const startServer = async () => {
     try {
         await connectDB();
-        app.listen(PORT, () => {
-            console.log(`🚀 Backend server running on http://localhost:${PORT}`);
-        });
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(PORT, () => {
+                console.log(`🚀 Backend server running on http://localhost:${PORT}`);
+            });
+        }
     } catch (error) {
         console.error('Failed to start server:', error);
     }
 };
 
 startServer();
+
+// Export for Vercel serverless
+export default app;
