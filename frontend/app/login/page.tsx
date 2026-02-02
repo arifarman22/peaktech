@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { signIn } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
 
 export default function LoginPage() {
@@ -97,11 +96,11 @@ export default function LoginPage() {
 
                         <button
                             type="button"
-                            onClick={() => signIn('google')}
-                            className="w-full bg-white/5 border border-white/10 text-white py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-white/10 transition-all active:scale-[0.98]"
+                            disabled
+                            className="w-full bg-white/5 border border-white/10 text-white py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-white/10 transition-all active:scale-[0.98] opacity-50 cursor-not-allowed"
                         >
                             <img src="https://www.google.com/favicon.ico" className="w-5 h-5 brightness-200" alt="Google" />
-                            Sign in with Google
+                            Google Sign-in (Coming Soon)
                         </button>
                     </form>
 
