@@ -40,9 +40,13 @@ const ensureDB = async (req: any, res: any, next: any) => {
         try {
             await connectDB();
             dbConnected = true;
-        } catch (error) {
-            console.error('DB connection failed:', error);
-            return res.status(500).json({ success: false, error: 'Database connection failed' });
+        } catch (error: any) {
+            console.error('DB connection failed:', error.message);
+            return res.status(503).json({ 
+                success: false, 
+                error: 'Service temporarily unavailable. Database connection failed.',
+                details: process.env.NODE_ENV === 'development' ? error.message : undefined
+            });
         }
     }
     next();
