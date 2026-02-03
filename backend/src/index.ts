@@ -45,7 +45,7 @@ const ensureDB = async (req: any, res: any, next: any) => {
             return res.status(503).json({ 
                 success: false, 
                 error: 'Service temporarily unavailable. Database connection failed.',
-                details: process.env.NODE_ENV === 'development' ? error.message : undefined
+                details: error.message
             });
         }
     }
