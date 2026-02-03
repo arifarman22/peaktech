@@ -10,6 +10,8 @@ interface User {
     email: string;
     role: 'user' | 'admin';
     image?: string;
+    phone?: string;
+    addresses?: any[];
 }
 
 interface AuthContextType {

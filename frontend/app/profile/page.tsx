@@ -30,11 +30,11 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ totalOrders: 0, totalSpent: 0, pendingOrders: 0 });
-  const [profileData, setProfileData] = useState({ name: user?.name || '', phone: user?.phone || '', addresses: user?.addresses || [] });
+  const [profileData, setProfileData] = useState({ name: user?.name || '', phone: user?.phone || '', image: user?.image || '', addresses: user?.addresses || [] });
 
   useEffect(() => {
     if (user) {
-      setProfileData({ name: user.name, phone: user.phone || '', addresses: user.addresses || [] });
+      setProfileData({ name: user.name, phone: user.phone || '', image: user.image || '', addresses: user.addresses || [] });
     }
   }, [user]);
 
@@ -87,8 +87,12 @@ export default function ProfilePage() {
           <div className="relative p-12 md:p-16 rounded-[48px] bg-zinc-950 text-white overflow-hidden group">
             <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-48 -mt-48 group-hover:bg-indigo-600/40 transition-colors duration-1000" />
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
-              <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center text-3xl font-black border border-white/20 shadow-2xl group-hover:rotate-6 transition-transform duration-500">
-                {user.name.charAt(0).toUpperCase()}
+              <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center text-3xl font-black border border-white/20 shadow-2xl group-hover:rotate-6 transition-transform duration-500 overflow-hidden">
+                {user.image ? (
+                  <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  user.name.charAt(0).toUpperCase()
+                )}
               </div>
               <div>
                 <span className="text-zinc-400 font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">User Profile</span>
@@ -271,6 +275,48 @@ export default function ProfilePage() {
                   <div>
                     <h2 className="text-3xl font-black tracking-tight italic mb-8">Profile Settings</h2>
                     <div className="p-10 bg-zinc-50 rounded-[32px] border border-zinc-100 space-y-8">
+                      <div className="flex flex-col items-center gap-6">
+                        <div className="relative group">
+                          <div className="w-32 h-32 rounded-3xl overflow-hidden bg-zinc-100 border-4 border-white shadow-xl">
+                            {profileData.image ? (
+                              <img src={profileData.image} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-5xl font-black text-zinc-400">
+                                {profileData.name.charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                          </div>
+                          <label className="absolute bottom-0 right-0 w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center cursor-pointer hover:bg-indigo-500 transition-all shadow-lg">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    setProfileData({ ...profileData, image: reader.result as string });
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {profileData.image && (
+                          <button
+                            onClick={() => setProfileData({ ...profileData, image: '' })}
+                            className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline"
+                          >
+                            Remove Picture
+                          </button>
+                        )}
+                      </div>
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Full Name</label>
                         <input
@@ -302,8 +348,9 @@ export default function ProfilePage() {
                       <button
                         onClick={async () => {
                           try {
-                            await api.post('/auth/profile', { name: profileData.name, phone: profileData.phone });
+                            await api.post('/auth/profile', { name: profileData.name, phone: profileData.phone, image: profileData.image });
                             toast.success('Profile updated');
+                            window.location.reload();
                           } catch (error) {
                             toast.error('Update failed');
                           }
