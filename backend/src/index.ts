@@ -64,16 +64,16 @@ app.get('/health', (req, res) => {
     });
 });
 
-app.use('/auth', ensureDB, authRoutes);
-app.use('/products', productRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/cart', ensureDB, cartRoutes);
-app.use('/orders', ensureDB, orderRoutes);
-app.use('/banners', bannerRoutes);
-app.use('/coupons', couponRoutes);
-app.use('/admin', ensureDB, adminRoutes);
-app.use('/admin/dashboard', ensureDB, dashboardRoutes);
-app.use('/wishlist', ensureDB, wishlistRoutes);
+app.use('/api/auth', ensureDB, authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/cart', ensureDB, cartRoutes);
+app.use('/api/orders', ensureDB, orderRoutes);
+app.use('/api/banners', bannerRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/admin', ensureDB, adminRoutes);
+app.use('/api/admin/dashboard', ensureDB, dashboardRoutes);
+app.use('/api/wishlist', ensureDB, wishlistRoutes);
 
 // Error handler
 app.use((err: any, req: any, res: any, next: any) => {
