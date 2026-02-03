@@ -62,6 +62,7 @@ app.get('/health', (req, res) => {
         status: 'ok',
         env: {
             hasMongoUri: !!process.env.MONGODB_URI,
+            mongoUriPreview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 30) + '...' : 'NOT SET',
             hasJwtSecret: !!process.env.JWT_SECRET,
             nodeEnv: process.env.NODE_ENV
         }
