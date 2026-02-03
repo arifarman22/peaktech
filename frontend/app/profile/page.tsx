@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ totalOrders: 0, totalSpent: 0, pendingOrders: 0 });
-  const [profileData, setProfileData] = useState({ name: user?.name || '', phone: user?.phone || '', image: user?.image || '', addresses: user?.addresses || [] });
+  const [profileData, setProfileData] = useState({ name: '', phone: '', image: '', addresses: [] as any[] });
 
   useEffect(() => {
     if (user) {
