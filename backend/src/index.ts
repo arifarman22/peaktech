@@ -52,6 +52,17 @@ app.get('/', (req, res) => {
     res.json({ message: 'PeakTech API is running', status: 'ok' });
 });
 
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok',
+        env: {
+            hasMongoUri: !!process.env.MONGODB_URI,
+            hasJwtSecret: !!process.env.JWT_SECRET,
+            nodeEnv: process.env.NODE_ENV
+        }
+    });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
@@ -62,6 +73,12 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+
+// Error handler
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error('Error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Internal server error' });
+});
 
 // Local server
 if (process.env.NODE_ENV !== 'production') {
