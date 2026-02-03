@@ -113,13 +113,13 @@ export default function ShopPage() {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-50">
+        <div className="min-h-screen">
             <Navbar />
 
             <div className="max-w-7xl mx-auto px-8 pt-32 pb-20">
                 {/* Shop Header */}
                 <div className="mb-16">
-                    <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-4">
+                    <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
                         Shop
                     </h1>
                     <p className="text-zinc-600 font-medium max-w-2xl text-lg">
