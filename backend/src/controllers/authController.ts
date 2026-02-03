@@ -100,8 +100,14 @@ export const verifyOTP = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: any, res: Response) => {
     try {
-        const { name } = req.body;
-        const user = await User.findByIdAndUpdate(req.user._id, { name }, { new: true }).select('-password');
+        const { name, phone, addresses } = req.body;
+        const updateData: any = {};
+        
+        if (name) updateData.name = name;
+        if (phone) updateData.phone = phone;
+        if (addresses) updateData.addresses = addresses;
+        
+        const user = await User.findByIdAndUpdate(req.user._id, updateData, { new: true }).select('-password');
         if (!user) return res.status(404).json(errorResponse('User not found'));
         return res.json(successResponse({ user }, 'Profile updated successfully'));
     } catch (error) {

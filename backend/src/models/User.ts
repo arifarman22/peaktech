@@ -6,10 +6,22 @@ export interface IUser extends Document {
     password?: string;
     role: 'user' | 'admin';
     image?: string;
+    phone?: string;
     emailVerified: boolean;
     otp?: string;
     otpExpiry?: Date;
     provider?: 'credentials' | 'google';
+    addresses: Array<{
+        label: string;
+        fullName: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        postalCode: string;
+        country: string;
+        isDefault: boolean;
+    }>;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -44,6 +56,9 @@ const UserSchema = new Schema<IUser>(
         image: {
             type: String,
         },
+        phone: {
+            type: String,
+        },
         emailVerified: {
             type: Boolean,
             default: false,
@@ -60,6 +75,20 @@ const UserSchema = new Schema<IUser>(
             type: String,
             enum: ['credentials', 'google'],
             default: 'credentials',
+        },
+        addresses: {
+            type: [{
+                label: { type: String, required: true },
+                fullName: { type: String, required: true },
+                phone: { type: String, required: true },
+                address: { type: String, required: true },
+                city: { type: String, required: true },
+                state: { type: String, required: true },
+                postalCode: { type: String, required: true },
+                country: { type: String, required: true, default: 'Bangladesh' },
+                isDefault: { type: Boolean, default: false },
+            }],
+            default: [],
         },
     },
     {

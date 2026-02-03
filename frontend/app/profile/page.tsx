@@ -7,6 +7,8 @@ import Link from 'next/link';
 import api from '@/lib/utils/api';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import AddressManager from '@/components/AddressManager';
+import toast from 'react-hot-toast';
 
 interface Order {
   _id: string;
@@ -28,6 +30,13 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ totalOrders: 0, totalSpent: 0, pendingOrders: 0 });
+  const [profileData, setProfileData] = useState({ name: user?.name || '', phone: user?.phone || '', addresses: user?.addresses || [] });
+
+  useEffect(() => {
+    if (user) {
+      setProfileData({ name: user.name, phone: user.phone || '', addresses: user.addresses || [] });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -258,17 +267,27 @@ export default function ProfilePage() {
               )}
 
               {activeTab === 'settings' && (
-                <div className="max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
-                  <h2 className="text-3xl font-black tracking-tight italic mb-12">Core Configuration.</h2>
-                  <div className="space-y-10">
+                <div className="max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-12">
+                  <div>
+                    <h2 className="text-3xl font-black tracking-tight italic mb-8">Profile Settings</h2>
                     <div className="p-10 bg-zinc-50 rounded-[32px] border border-zinc-100 space-y-8">
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Full Name</label>
                         <input
                           type="text"
-                          value={user.name}
-                          disabled
-                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-white font-black text-zinc-950 outline-none"
+                          value={profileData.name}
+                          onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-white font-bold text-zinc-950 outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Phone Number</label>
+                        <input
+                          type="tel"
+                          value={profileData.phone}
+                          onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                          placeholder="+880 1234567890"
+                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-white font-bold text-zinc-950 outline-none focus:border-indigo-500"
                         />
                       </div>
                       <div className="space-y-3">
@@ -277,26 +296,26 @@ export default function ProfilePage() {
                           type="email"
                           value={user.email}
                           disabled
-                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-white font-black text-zinc-950 outline-none"
+                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-gray-100 font-bold text-zinc-500 outline-none"
                         />
                       </div>
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Account Role</label>
-                        <input
-                          type="text"
-                          value={user.role}
-                          disabled
-                          className="w-full px-8 py-5 border border-zinc-100 rounded-2xl bg-white font-black text-zinc-950 outline-none uppercase tracking-widest"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="p-10 bg-zinc-950 rounded-[32px] text-white">
-                      <h4 className="text-xl font-black italic mb-4">Security Settings</h4>
-                      <p className="text-zinc-500 font-medium text-xs mb-8 leading-relaxed">Your account security is important. Update your password or security settings here.</p>
-                      <button className="px-10 py-5 bg-white text-zinc-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-100 transition-all active:scale-95">Update Security</button>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.post('/auth/profile', { name: profileData.name, phone: profileData.phone });
+                            toast.success('Profile updated');
+                          } catch (error) {
+                            toast.error('Update failed');
+                          }
+                        }}
+                        className="w-full px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all"
+                      >
+                        Save Changes
+                      </button>
                     </div>
                   </div>
+
+                  <AddressManager addresses={profileData.addresses} onUpdate={() => window.location.reload()} />
                 </div>
               )}
             </div>
