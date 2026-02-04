@@ -403,7 +403,9 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
               <span className="text-xs text-zinc-400 line-through font-bold">৳{product.compareAtPrice.toLocaleString()}</span>
             )}
           </div>
-          <button className="text-[10px] font-black uppercase tracking-widest text-orange-400 hover:text-orange-600 transition-colors">Details →</button>
+          <Link href={`/products/${product.slug}`} className="text-[10px] font-black uppercase tracking-widest text-orange-400 hover:text-orange-600 transition-colors">
+            Details →
+          </Link>
         </div>
       </div>
     </div>
