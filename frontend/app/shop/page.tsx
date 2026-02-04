@@ -261,9 +261,16 @@ export default function ShopPage() {
                     {/* Product Grid */}
                     <div className="flex-grow">
                         <div className="flex items-center justify-between mb-10">
-                            <h2 className="text-sm font-semibold text-zinc-900">
-                                {products.length} Products
-                            </h2>
+                            <div>
+                                <h2 className="text-sm font-semibold text-zinc-900">
+                                    {products.length} Products
+                                </h2>
+                                {searchQuery && (
+                                    <p className="text-xs text-zinc-500 mt-1">
+                                        Search results for: <span className="font-bold text-orange-600">"{searchQuery}"</span>
+                                    </p>
+                                )}
+                            </div>
                         </div>
 
                         {loading ? (

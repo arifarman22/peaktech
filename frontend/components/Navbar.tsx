@@ -33,8 +33,7 @@ function NavbarContent() {
 
     const fetchCartCount = async () => {
         try {
-            const res = await apiFetch('/cart');
-            const data = await res.json();
+            const data = await apiFetch('/cart');
             if (data.success) {
                 const count = data.data.items.reduce((acc: number, item: any) => acc + item.quantity, 0);
                 setCartCount(count);

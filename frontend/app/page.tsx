@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import QuickViewModal from "@/components/QuickViewModal";
 import BannerSlider from "@/components/BannerSlider";
 import CategorySlider from "@/components/CategorySlider";
+import Loader from "@/components/Loader";
 
 interface Product {
   _id: string;
@@ -39,12 +40,19 @@ export default function Home() {
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'trending' | 'best-sellers'>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories();
-    fetchTrending();
-    fetchBestSellers();
-    fetchTopRated();
+    const loadInitialData = async () => {
+      await Promise.all([
+        fetchCategories(),
+        fetchTrending(),
+        fetchBestSellers(),
+        fetchTopRated()
+      ]);
+      setInitialLoading(false);
+    };
+    loadInitialData();
   }, []);
 
   useEffect(() => {
@@ -119,7 +127,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
+    <>
+      {initialLoading && <Loader />}
+      <div className="min-h-screen">
       <Navbar />
 
       <main className="pt-0">
@@ -472,6 +482,7 @@ export default function Home() {
       <Footer />
       {quickViewProduct && <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />}
     </div>
+    </>
   );
 }
 
