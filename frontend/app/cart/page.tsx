@@ -37,8 +37,7 @@ export default function CartPage() {
 
     const fetchCart = async () => {
         try {
-            const res = await apiFetch('/cart');
-            const data = await res.json();
+            const data = await apiFetch('/cart');
             if (data.success) {
                 setCartItems(data.data.items);
                 setTotal(data.data.total);
@@ -52,11 +51,11 @@ export default function CartPage() {
 
     const removeItem = async (productId: string) => {
         try {
-            const res = await apiFetch('/cart', {
+            const data = await apiFetch('/cart', {
                 method: 'DELETE',
                 body: JSON.stringify({ productId }),
             });
-            if (res.ok) {
+            if (data.success) {
                 fetchCart();
                 toast.success('Unit removed');
             }
