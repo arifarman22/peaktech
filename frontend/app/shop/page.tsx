@@ -335,8 +335,8 @@ export default function ShopPage() {
 
 function ProductCard({ product }: { product: Product }) {
     return (
-        <div className="group">
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white mb-4 transition-all duration-500 group-hover:shadow-lg border border-zinc-100">
+        <div className="group bg-white rounded-2xl border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-orange-200">
+            <div className="relative aspect-square rounded-xl overflow-hidden bg-white mb-3 transition-all duration-500 group-hover:shadow-lg">
                 <Link href={`/products/${product.slug}`} className="block h-full w-full">
                     <img
                         src={product.images[0]}
@@ -345,17 +345,17 @@ function ProductCard({ product }: { product: Product }) {
                     />
                 </Link>
                 {product.compareAtPrice && product.compareAtPrice > product.price && (
-                    <div className="absolute top-3 left-3">
-                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    <div className="absolute top-2 left-2">
+                        <span className="bg-red-500 text-white px-2.5 py-1 rounded-full text-xs font-bold">
                             -{Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
                         </span>
                     </div>
                 )}
             </div>
-            <div>
+            <div className="px-1">
                 <p className="text-xs font-medium text-zinc-500 mb-2">{product.category.name}</p>
                 <Link href={`/products/${product.slug}`}>
-                    <h3 className="text-base font-semibold text-zinc-900 mb-2 line-clamp-2 hover:text-zinc-600 transition-colors">{product.name}</h3>
+                    <h3 className="text-sm font-semibold text-zinc-900 mb-2 line-clamp-2 hover:text-zinc-600 transition-colors">{product.name}</h3>
                 </Link>
                 <div className="flex items-center gap-2">
                     <span className="text-lg font-bold text-zinc-900">৳{product.price.toLocaleString()}</span>

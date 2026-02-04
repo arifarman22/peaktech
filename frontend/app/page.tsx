@@ -519,8 +519,8 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
   };
 
   return (
-    <div className="group">
-      <div className="relative aspect-square rounded-[32px] overflow-hidden bg-white mb-6 transform transition-all duration-700 group-hover:shadow-[0_40px_80px_-20px_rgba(249,115,22,0.3)] group-hover:-translate-y-2 border border-orange-100">
+    <div className="group bg-white rounded-[32px] border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-orange-200">
+      <div className="relative aspect-square rounded-[28px] overflow-hidden bg-white mb-4 transform transition-all duration-700 group-hover:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.2)] group-hover:-translate-y-1">
         <Link href={`/products/${product.slug}`} className="block h-full w-full">
           <img
             src={product.images[0]}
@@ -528,38 +528,38 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
             className="w-full h-full object-cover transform transition-transform duration-[2000ms] group-hover:scale-110"
           />
         </Link>
-        <div className="absolute top-6 right-6 flex flex-col gap-3">
+        <div className="absolute top-4 right-4 flex flex-col gap-2">
           <button
             onClick={toggleWishlist}
-            className="w-12 h-12 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl hover:bg-white active:scale-90 border border-orange-100"
+            className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:bg-white active:scale-90 border border-zinc-100"
           >
-            <svg className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-orange-600'}`} fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-4 h-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-orange-600'}`} fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </button>
           <button
             onClick={(e) => { e.preventDefault(); onQuickView(product); }}
-            className="w-12 h-12 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 delay-75 shadow-xl hover:bg-gradient-to-br hover:from-orange-500 hover:to-pink-500 hover:text-white active:scale-90 border border-orange-100"
+            className="w-10 h-10 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 delay-50 shadow-lg hover:bg-gradient-to-br hover:from-orange-500 hover:to-pink-500 hover:text-white active:scale-90 border border-zinc-100"
           >
-            <svg className="w-5 h-5 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-orange-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
           </button>
         </div>
         {product.compareAtPrice && product.compareAtPrice > product.price && (
-          <div className="absolute bottom-6 left-6 font-black text-[10px] bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+          <div className="absolute bottom-4 left-4 font-black text-[10px] bg-gradient-to-r from-red-500 to-pink-500 text-white px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">
             -{Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
           </div>
         )}
       </div>
       <div className="px-2">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-2 mb-2">
           <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">{product.category.name}</span>
-          <div className="h-px flex-grow bg-orange-100" />
+          <div className="h-px flex-grow bg-zinc-100" />
         </div>
         <Link href={`/products/${product.slug}`}>
-          <h3 className="font-bold text-zinc-900 mb-3 line-clamp-2 hover:text-orange-600 transition-colors duration-300 h-10">{product.name}</h3>
+          <h3 className="font-bold text-zinc-900 mb-2 line-clamp-2 hover:text-orange-600 transition-colors duration-300 h-10 text-sm">{product.name}</h3>
         </Link>
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-2">
@@ -569,7 +569,7 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
             )}
           </div>
           <Link href={`/products/${product.slug}`} className="text-[10px] font-black uppercase tracking-widest text-orange-400 hover:text-orange-600 transition-colors">
-            Details →
+            View →
           </Link>
         </div>
       </div>
