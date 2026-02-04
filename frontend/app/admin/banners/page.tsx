@@ -40,8 +40,7 @@ export default function AdminBannersPage() {
 
     const fetchBanners = async () => {
         try {
-            const res = await apiFetch('/banners');
-            const data = await res.json();
+            const data = await apiFetch('/banners');
             if (data.success) {
                 setBanners(data.data);
             }
@@ -58,12 +57,11 @@ export default function AdminBannersPage() {
             const url = isEditing ? `/banners/${currentId}` : '/banners';
             const method = isEditing ? 'PUT' : 'POST';
 
-            const res = await apiFetch(url, {
+            const data = await apiFetch(url, {
                 method,
                 body: JSON.stringify(formData),
             });
 
-            const data = await res.json();
             if (data.success) {
                 toast.success(isEditing ? 'Banner updated' : 'Banner created');
                 fetchBanners();
@@ -79,8 +77,8 @@ export default function AdminBannersPage() {
     const deleteBanner = async (id: string) => {
         if (!confirm('Are you sure?')) return;
         try {
-            const res = await apiFetch(`/banners/${id}`, { method: 'DELETE' });
-            if (res.ok) {
+            const data = await apiFetch(`/banners/${id}`, { method: 'DELETE' });
+            if (data.success) {
                 toast.success('Banner deleted');
                 fetchBanners();
             }

@@ -26,8 +26,7 @@ export default function AdminProductsPage() {
 
     const fetchProducts = async () => {
         try {
-            const res = await apiFetch('/products?limit=100');
-            const data = await res.json();
+            const data = await apiFetch('/products?limit=100');
             if (data.success) {
                 setProducts(data.data.products);
             }
@@ -42,8 +41,8 @@ export default function AdminProductsPage() {
         if (!confirm('Are you sure you want to delete this product?')) return;
 
         try {
-            const res = await apiFetch(`/products/${id}`, { method: 'DELETE' });
-            if (res.ok) {
+            const data = await apiFetch(`/products/${id}`, { method: 'DELETE' });
+            if (data.success) {
                 toast.success('Product deleted');
                 fetchProducts();
             } else {

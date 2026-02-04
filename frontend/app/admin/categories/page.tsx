@@ -34,8 +34,7 @@ export default function AdminCategoriesPage() {
 
     const fetchCategories = async () => {
         try {
-            const res = await apiFetch('/categories');
-            const data = await res.json();
+            const data = await apiFetch('/categories');
             if (data.success) {
                 setCategories(data.data);
             }
@@ -52,12 +51,11 @@ export default function AdminCategoriesPage() {
             const url = isEditing ? `/categories/${currentId}` : '/categories';
             const method = isEditing ? 'PUT' : 'POST';
 
-            const res = await apiFetch(url, {
+            const data = await apiFetch(url, {
                 method,
                 body: JSON.stringify(formData),
             });
 
-            const data = await res.json();
             if (data.success) {
                 toast.success(isEditing ? 'Category updated' : 'Category created');
                 fetchCategories();
@@ -73,8 +71,8 @@ export default function AdminCategoriesPage() {
     const deleteCategory = async (id: string) => {
         if (!confirm('Are you sure?')) return;
         try {
-            const res = await apiFetch(`/categories/${id}`, { method: 'DELETE' });
-            if (res.ok) {
+            const data = await apiFetch(`/categories/${id}`, { method: 'DELETE' });
+            if (data.success) {
                 toast.success('Category deleted');
                 fetchCategories();
             }

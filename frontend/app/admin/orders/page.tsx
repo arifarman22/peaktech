@@ -44,8 +44,7 @@ export default function AdminOrdersPage() {
 
     const fetchOrders = async () => {
         try {
-            const res = await apiFetch('/admin/orders');
-            const data = await res.json();
+            const data = await apiFetch('/admin/orders');
             if (data.success) {
                 setOrders(data.data);
             }
@@ -58,11 +57,11 @@ export default function AdminOrdersPage() {
 
     const updateStatus = async (id: string, status: string) => {
         try {
-            const res = await apiFetch(`/admin/orders/${id}`, {
+            const data = await apiFetch(`/admin/orders/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ orderStatus: status }),
             });
-            if (res.ok) {
+            if (data.success) {
                 toast.success('Order updated');
                 fetchOrders();
                 if (selectedOrder?._id === id) {

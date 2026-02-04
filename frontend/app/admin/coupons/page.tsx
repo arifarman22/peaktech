@@ -39,9 +39,8 @@ export default function AdminCouponsPage() {
 
     const fetchCoupons = async () => {
         try {
-            const res = await apiFetch('/admin/coupons'); // Need backend
-            const json = await res.json();
-            if (json.success) setCoupons(json.data);
+            const data = await apiFetch('/admin/coupons');
+            if (data.success) setCoupons(data.data);
         } catch (error) {
             toast.error('Failed to load coupons');
         } finally {
@@ -54,9 +53,8 @@ export default function AdminCouponsPage() {
         try {
             const url = isEditing ? `/admin/coupons/${currentId}` : '/admin/coupons';
             const method = isEditing ? 'PUT' : 'POST';
-            const res = await apiFetch(url, { method, body: JSON.stringify(formData) });
-            const json = await res.json();
-            if (json.success) {
+            const data = await apiFetch(url, { method, body: JSON.stringify(formData) });
+            if (data.success) {
                 toast.success('Coupon saved');
                 fetchCoupons();
                 resetForm();
