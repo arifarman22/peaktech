@@ -53,8 +53,7 @@ export default function CheckoutPage() {
 
     const fetchCart = async () => {
         try {
-            const res = await apiFetch('/cart');
-            const data = await res.json();
+            const data = await apiFetch('/cart');
             if (data.success) {
                 if (data.data.items.length === 0) {
                     router.push('/cart');
@@ -91,12 +90,10 @@ export default function CheckoutPage() {
         setSubmitting(true);
 
         try {
-            const res = await apiFetch('/orders', {
+            const data = await apiFetch('/orders', {
                 method: 'POST',
                 body: JSON.stringify(formData),
             });
-
-            const data = await res.json();
 
             if (data.success) {
                 toast.success('Order confirmed!');
