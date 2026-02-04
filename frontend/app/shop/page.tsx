@@ -58,8 +58,7 @@ export default function ShopPage() {
 
     const fetchCategories = async () => {
         try {
-            const res = await apiFetch('/categories');
-            const data = await res.json();
+            const data = await apiFetch('/categories');
             if (data.success) setCategories(data.data);
         } catch (error) { }
     };
@@ -75,8 +74,7 @@ export default function ShopPage() {
             if (trending) url += `&trending=true`;
             if (topSeller) url += `&topSeller=true`;
 
-            const res = await apiFetch(url);
-            const data = await res.json();
+            const data = await apiFetch(url);
             if (data.success) {
                 setProducts(data.data.products);
                 setTotalPages(data.data.pagination.pages);
@@ -90,24 +88,21 @@ export default function ShopPage() {
 
     const fetchTrending = async () => {
         try {
-            const res = await apiFetch('/products?trending=true&limit=4');
-            const data = await res.json();
+            const data = await apiFetch('/products?trending=true&limit=4');
             if (data.success) setTrendingProducts(data.data.products);
         } catch (error) { }
     };
 
     const fetchBestSellers = async () => {
         try {
-            const res = await apiFetch('/products?topSeller=true&limit=4');
-            const data = await res.json();
+            const data = await apiFetch('/products?topSeller=true&limit=4');
             if (data.success) setBestSellers(data.data.products);
         } catch (error) { }
     };
 
     const fetchTopRated = async () => {
         try {
-            const res = await apiFetch('/products?featured=true&limit=4');
-            const data = await res.json();
+            const data = await apiFetch('/products?featured=true&limit=4');
             if (data.success) setTopRated(data.data.products);
         } catch (error) { }
     };
