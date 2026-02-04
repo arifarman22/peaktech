@@ -35,8 +35,7 @@ export default function ProductDetailsPage() {
 
     const fetchProduct = async () => {
         try {
-            const res = await apiFetch(`/products/${params.slug}`);
-            const data = await res.json();
+            const data = await apiFetch(`/products/${params.slug}`);
             if (data.success) setProduct(data.data);
         } catch (error) {
             toast.error('Failed to load product');
@@ -47,11 +46,10 @@ export default function ProductDetailsPage() {
 
     const addToCart = async () => {
         try {
-            const res = await apiFetch('/cart', {
+            const data = await apiFetch('/cart', {
                 method: 'POST',
                 body: JSON.stringify({ productId: product?._id, quantity }),
             });
-            const data = await res.json();
             if (data.success) {
                 toast.success('Unit added to vessel');
             } else {
