@@ -22,7 +22,11 @@ export const getProducts = async (req: Request, res: Response) => {
 
         // Search filter
         if (search) {
-            query.$text = { $search: search as string };
+            query.$or = [
+                { name: { $regex: search as string, $options: 'i' } },
+                { description: { $regex: search as string, $options: 'i' } },
+                { tags: { $regex: search as string, $options: 'i' } }
+            ];
         }
 
         // Category filter
