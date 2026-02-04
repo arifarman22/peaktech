@@ -70,12 +70,12 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/auth', ensureDB, authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
+app.use('/api/products', ensureDB, productRoutes);
+app.use('/api/categories', ensureDB, categoryRoutes);
 app.use('/api/cart', ensureDB, cartRoutes);
 app.use('/api/orders', ensureDB, orderRoutes);
-app.use('/api/banners', bannerRoutes);
-app.use('/api/coupons', couponRoutes);
+app.use('/api/banners', ensureDB, bannerRoutes);
+app.use('/api/coupons', ensureDB, couponRoutes);
 app.use('/api/admin', ensureDB, adminRoutes);
 app.use('/api/admin/dashboard', ensureDB, dashboardRoutes);
 app.use('/api/wishlist', ensureDB, wishlistRoutes);
