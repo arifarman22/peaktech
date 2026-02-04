@@ -335,7 +335,7 @@ export default function ShopPage() {
 
 function ProductCard({ product }: { product: Product }) {
     return (
-        <div className="group bg-white rounded-2xl border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-orange-200">
+        <div className="group bg-white rounded-2xl border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-black">
             <div className="relative aspect-square rounded-xl overflow-hidden bg-white mb-3 transition-all duration-500 group-hover:shadow-lg">
                 <Link href={`/products/${product.slug}`} className="block h-full w-full">
                     <img

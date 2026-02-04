@@ -519,7 +519,7 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
   };
 
   return (
-    <div className="group bg-white rounded-[32px] border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-orange-200">
+    <div className="group bg-white rounded-[32px] border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-black">
       <div className="relative aspect-square rounded-[28px] overflow-hidden bg-white mb-4 transform transition-all duration-700 group-hover:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.2)] group-hover:-translate-y-1">
         <Link href={`/products/${product.slug}`} className="block h-full w-full">
           <img
