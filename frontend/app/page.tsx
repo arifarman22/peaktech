@@ -69,16 +69,19 @@ export default function Home() {
       if (selectedFilter === 'best-sellers') url += '&topSeller=true';
       if (selectedCategory) url += `&category=${selectedCategory}`;
 
+      console.log('Fetching products from:', url);
       const res = await apiFetch(url);
       const data = await res.json();
+      console.log('Products response:', data);
       if (data.success) {
         const filtered = data.data.products.filter((p: Product) =>
           p.price >= priceRange[0] && p.price <= priceRange[1]
         );
+        console.log('Filtered products:', filtered.length);
         setProducts(filtered);
       }
     } catch (error) {
-      console.log("Error fetching products");
+      console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
@@ -86,31 +89,37 @@ export default function Home() {
 
   const fetchTrending = async () => {
     try {
+      console.log('Fetching trending products...');
       const res = await apiFetch('/products?trending=true&limit=8');
       const data = await res.json();
+      console.log('Trending response:', data);
       if (data.success) setTrendingProducts(data.data.products);
     } catch (error) {
-      console.log("Error fetching trending");
+      console.error("Error fetching trending:", error);
     }
   };
 
   const fetchBestSellers = async () => {
     try {
+      console.log('Fetching best sellers...');
       const res = await apiFetch('/products?topSeller=true&limit=8');
       const data = await res.json();
+      console.log('Best sellers response:', data);
       if (data.success) setBestSellers(data.data.products);
     } catch (error) {
-      console.log("Error fetching best sellers");
+      console.error("Error fetching best sellers:", error);
     }
   };
 
   const fetchTopRated = async () => {
     try {
+      console.log('Fetching top rated...');
       const res = await apiFetch('/products?featured=true&limit=8');
       const data = await res.json();
+      console.log('Top rated response:', data);
       if (data.success) setTopRated(data.data.products);
     } catch (error) {
-      console.log("Error fetching top rated");
+      console.error("Error fetching top rated:", error);
     }
   };
 
