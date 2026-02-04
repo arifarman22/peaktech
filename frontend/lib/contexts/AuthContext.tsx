@@ -45,17 +45,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return;
             }
             
-            const res = await apiFetch('/auth/me');
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success) {
-                    setUser(data.data.user);
-                }
-            } else if (res.status === 401) {
+            const data = await apiFetch('/auth/me');
+            if (data.success) {
+                setUser(data.data.user);
+            }
+        } catch (error: any) {
+            if (error.message?.includes('401')) {
                 localStorage.removeItem('accessToken');
                 setUser(null);
             }
-        } catch (error) {
             console.error('Failed to fetch user:', error);
         } finally {
             setLoading(false);
@@ -67,12 +65,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const res = await apiFetch('/auth/login', {
+        const data = await apiFetch('/auth/login', {
             method: 'POST',
             body: JSON.stringify({ email, password }),
         });
-
-        const data = await res.json();
 
         if (!data.success) {
             throw new Error(data.error || 'Login failed');
@@ -87,12 +83,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const register = async (name: string, email: string, password: string) => {
-        const res = await apiFetch('/auth/register', {
+        const data = await apiFetch('/auth/register', {
             method: 'POST',
             body: JSON.stringify({ name, email, password }),
         });
-
-        const data = await res.json();
 
         if (!data.success) {
             throw new Error(data.error || 'Registration failed');
@@ -100,12 +94,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const verifyOTP = async (email: string, otp: string) => {
-        const res = await apiFetch('/auth/verify-otp', {
+        const data = await apiFetch('/auth/verify-otp', {
             method: 'POST',
             body: JSON.stringify({ email, otp }),
         });
-
-        const data = await res.json();
 
         if (!data.success) {
             throw new Error(data.error || 'Verification failed');
@@ -120,12 +112,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const googleLogin = async (userData: any) => {
-        const res = await apiFetch('/auth/google', {
+        const data = await apiFetch('/auth/google', {
             method: 'POST',
             body: JSON.stringify(userData),
         });
 
-        const data = await res.json();
         if (data.success) {
             if (data.data.accessToken && typeof window !== 'undefined') {
                 localStorage.setItem('accessToken', data.data.accessToken);

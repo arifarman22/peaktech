@@ -26,10 +26,23 @@ const PORT = Number(env.PORT) || 5000;
 // Middleware
 app.set('trust proxy', 1);
 app.use(helmet());
+
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://peaktech-frontend.vercel.app',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: '*',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: false,
+    credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(apiLimiter);
@@ -97,7 +110,17 @@ app.use('/api/wishlist', ensureDB, wishlistRoutes);
 // Error handler
 app.use((err: any, req: any, res: any, next: any) => {
     console.error('Error:', err);
-    res.status(500).json({ success: false, error: err.message || 'Internal server error' });
+    
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({ success: false, error: 'CORS policy violation' });
+    }
+    
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({ 
+        success: false, 
+        error: err.message || 'Internal server error',
+        ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+    });
 });
 
 // Local server

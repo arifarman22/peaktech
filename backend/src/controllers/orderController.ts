@@ -20,6 +20,17 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
             return res.status(400).json(errorResponse('Cart is empty'));
         }
 
+        // Check inventory availability before creating order
+        for (const item of cart.items) {
+            const product = await Product.findById(item.product._id);
+            if (!product) {
+                return res.status(400).json(errorResponse(`Product ${item.product.name} not found`));
+            }
+            if (product.trackQuantity && product.quantity < item.quantity) {
+                return res.status(400).json(errorResponse(`Insufficient stock for ${product.name}. Available: ${product.quantity}`));
+            }
+        }
+
         const subtotal = cart.items.reduce((sum, item: any) => sum + item.price * item.quantity, 0);
         const tax = subtotal * 0.1;
         const shippingCost = subtotal > 100 ? 0 : 10;
@@ -48,12 +59,22 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
             notes: validated.data.notes,
         });
 
-        // Update inventory
+        // Update inventory atomically
         for (const item of cart.items) {
-            const product = await Product.findById(item.product._id);
-            if (product && product.trackQuantity) {
-                product.quantity -= item.quantity;
-                await product.save();
+            const result = await Product.findOneAndUpdate(
+                { 
+                    _id: item.product._id, 
+                    trackQuantity: true,
+                    quantity: { $gte: item.quantity }
+                },
+                { $inc: { quantity: -item.quantity } },
+                { new: true }
+            );
+            
+            if (!result) {
+                // Rollback: delete order if inventory update fails
+                await Order.findByIdAndDelete(order._id);
+                return res.status(400).json(errorResponse(`Failed to update inventory for ${item.product.name}`));
             }
         }
 

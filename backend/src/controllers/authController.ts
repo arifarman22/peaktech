@@ -103,25 +103,47 @@ export const updateProfile = async (req: any, res: Response) => {
         const { name, phone, addresses, image } = req.body;
         const updateData: any = {};
         
-        if (name) updateData.name = name;
-        if (phone) updateData.phone = phone;
-        if (addresses) updateData.addresses = addresses;
-        if (image !== undefined) updateData.image = image;
+        if (name !== undefined) {
+            if (typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 50) {
+                return res.status(400).json(errorResponse('Name must be between 2 and 50 characters'));
+            }
+            updateData.name = name.trim();
+        }
         
-        const user = await User.findByIdAndUpdate(req.user._id, updateData, { new: true }).select('-password');
+        if (phone !== undefined) {
+            if (typeof phone !== 'string' || phone.trim().length === 0) {
+                return res.status(400).json(errorResponse('Invalid phone number'));
+            }
+            updateData.phone = phone.trim();
+        }
+        
+        if (addresses !== undefined) {
+            if (!Array.isArray(addresses)) {
+                return res.status(400).json(errorResponse('Addresses must be an array'));
+            }
+            updateData.addresses = addresses;
+        }
+        
+        if (image !== undefined) {
+            updateData.image = image;
+        }
+        
+        const user = await User.findByIdAndUpdate(req.user.userId, updateData, { new: true }).select('-password');
         if (!user) return res.status(404).json(errorResponse('User not found'));
         return res.json(successResponse({ user }, 'Profile updated successfully'));
     } catch (error) {
+        console.error('Update profile error:', error);
         return res.status(500).json(errorResponse('Failed to update profile'));
     }
 };
 
 export const getMe = async (req: any, res: Response) => {
     try {
-        const user = await User.findById(req.user._id).select('-password');
+        const user = await User.findById(req.user.userId).select('-password');
         if (!user) return res.status(404).json(errorResponse('User not found'));
         return res.json(successResponse({ user }));
     } catch (error) {
+        console.error('Get me error:', error);
         return res.status(500).json(errorResponse('Failed to fetch user'));
     }
 };
