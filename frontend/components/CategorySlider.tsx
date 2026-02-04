@@ -26,10 +26,12 @@ export default function CategorySlider() {
                     <Link
                         key={idx}
                         href={`/shop?category=${cat.slug}`}
-                        className="inline-flex items-center gap-4 px-6 py-4 rounded-2xl bg-zinc-50 border border-zinc-100 hover:bg-white hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group min-w-[180px]"
+                        className="inline-flex flex-col items-center gap-3 px-6 py-5 rounded-2xl bg-zinc-50 border border-zinc-100 hover:bg-white hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/5 transition-all group min-w-[140px]"
                     >
-                        <span className="text-3xl filter grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">{cat.icon}</span>
-                        <span className="text-sm font-bold text-zinc-900 tracking-tight">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-100 to-pink-100 flex items-center justify-center group-hover:from-orange-500 group-hover:to-pink-500 transition-all duration-300">
+                            <span className="text-3xl filter grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">{cat.icon}</span>
+                        </div>
+                        <span className="text-sm font-bold text-zinc-900 tracking-tight text-center">
                             {cat.name}
                         </span>
                     </Link>
