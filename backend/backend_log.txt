@@ -1,0 +1,26 @@
+
+> backend@1.0.0 start
+> ts-node src/index.ts
+
+[dotenv@17.2.3] injecting env (11) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/controllers/orderController.ts(27,83): error TS2339: Property 'name' does not exist on type 'ObjectId'.
+src/controllers/orderController.ts(77,106): error TS2339: Property 'name' does not exist on type 'ObjectId'.
+
+    at createTSError (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  diagnosticCodes: [ 2339, 2339 ]
+}
+
+E:\PeakTech Ecommerce\PeakTech-E-Commerce-main\backend>

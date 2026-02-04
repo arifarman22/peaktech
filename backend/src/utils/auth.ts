@@ -18,7 +18,7 @@ export interface TokenPayload {
  * Generate access token (expires in 1 hour)
  */
 export function generateAccessToken(payload: TokenPayload): string {
-    return jwt.sign(payload, JWT_SECRET, {
+    return jwt.sign(payload, JWT_SECRET as string, {
         expiresIn: '1h',
     });
 }
@@ -27,7 +27,7 @@ export function generateAccessToken(payload: TokenPayload): string {
  * Generate refresh token (expires in 7 days)
  */
 export function generateRefreshToken(payload: TokenPayload): string {
-    return jwt.sign(payload, JWT_REFRESH_SECRET, {
+    return jwt.sign(payload, JWT_REFRESH_SECRET as string, {
         expiresIn: '7d',
     });
 }
@@ -37,7 +37,7 @@ export function generateRefreshToken(payload: TokenPayload): string {
  */
 export function verifyAccessToken(token: string): TokenPayload | null {
     try {
-        const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
+        const decoded = jwt.verify(token, JWT_SECRET as string) as TokenPayload;
         return decoded;
     } catch (error) {
         return null;
@@ -49,7 +49,7 @@ export function verifyAccessToken(token: string): TokenPayload | null {
  */
 export function verifyRefreshToken(token: string): TokenPayload | null {
     try {
-        const decoded = jwt.verify(token, JWT_REFRESH_SECRET) as TokenPayload;
+        const decoded = jwt.verify(token, JWT_REFRESH_SECRET as string) as TokenPayload;
         return decoded;
     } catch (error) {
         return null;

@@ -22,9 +22,9 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
 
         // Check inventory availability before creating order
         for (const item of cart.items) {
-            const product = await Product.findById(item.product._id);
+            const product = await Product.findById((item.product as any)._id);
             if (!product) {
-                return res.status(400).json(errorResponse(`Product ${item.product.name} not found`));
+                return res.status(400).json(errorResponse(`Product ${(item.product as any).name} not found`));
             }
             if (product.trackQuantity && product.quantity < item.quantity) {
                 return res.status(400).json(errorResponse(`Insufficient stock for ${product.name}. Available: ${product.quantity}`));
@@ -63,7 +63,7 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
         for (const item of cart.items) {
             const result = await Product.findOneAndUpdate(
                 { 
-                    _id: item.product._id, 
+                    _id: (item.product as any)._id, 
                     trackQuantity: true,
                     quantity: { $gte: item.quantity }
                 },
@@ -74,7 +74,7 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
             if (!result) {
                 // Rollback: delete order if inventory update fails
                 await Order.findByIdAndDelete(order._id);
-                return res.status(400).json(errorResponse(`Failed to update inventory for ${item.product.name}`));
+                return res.status(400).json(errorResponse(`Failed to update inventory for ${(item.product as any).name}`));
             }
         }
 

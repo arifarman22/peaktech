@@ -6,10 +6,15 @@ if (!MONGODB_URI) {
   throw new Error('MONGODB_URI environment variable is not defined');
 }
 
-let cached = global.mongoose;
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
+let cached = (global as any).mongoose as MongooseCache;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
 async function connectDB(): Promise<typeof mongoose> {
@@ -26,7 +31,7 @@ async function connectDB(): Promise<typeof mongoose> {
       connectTimeoutMS: 15000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
       console.log('✅ MongoDB connected');
       return mongoose;
     });
