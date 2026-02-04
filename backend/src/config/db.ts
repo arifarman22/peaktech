@@ -6,10 +6,8 @@ if (!MONGODB_URI) {
   throw new Error('MONGODB_URI environment variable is not defined');
 }
 
-let isConnected = false;
-
 async function connectDB(): Promise<typeof mongoose> {
-  if (isConnected && mongoose.connection.readyState === 1) {
+  if (mongoose.connection.readyState >= 1) {
     return mongoose;
   }
 
@@ -17,16 +15,15 @@ async function connectDB(): Promise<typeof mongoose> {
     const opts = {
       bufferCommands: false,
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 15000,
       socketTimeoutMS: 45000,
+      connectTimeoutMS: 15000,
     };
 
     await mongoose.connect(MONGODB_URI, opts);
-    isConnected = true;
     console.log('✅ MongoDB connected');
     return mongoose;
   } catch (error: any) {
-    isConnected = false;
     console.error('❌ MongoDB connection failed:', error.message);
     throw new Error(`Database connection failed: ${error.message}`);
   }
