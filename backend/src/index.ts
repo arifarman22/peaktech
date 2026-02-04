@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import mongoose from 'mongoose';
 import connectDB from './config/db';
 import { apiLimiter } from './utils/rate-limiter';
 import authRoutes from './routes/authRoutes';
@@ -57,9 +58,22 @@ app.get('/', (req, res) => {
     res.json({ message: 'PeakTech API is running', status: 'ok' });
 });
 
-app.get('/health', (req, res) => {
+app.get('/health', async (req, res) => {
+    let dbStatus = 'not connected';
+    try {
+        if (mongoose.connection.readyState === 1) {
+            dbStatus = 'connected';
+        } else {
+            await connectDB();
+            dbStatus = 'connected after attempt';
+        }
+    } catch (error: any) {
+        dbStatus = `error: ${error.message}`;
+    }
+    
     res.json({ 
         status: 'ok',
+        db: dbStatus,
         env: {
             hasMongoUri: !!process.env.MONGODB_URI,
             mongoUriPreview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 30) + '...' : 'NOT SET',
