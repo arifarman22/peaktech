@@ -29,28 +29,28 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-950 flex flex-col relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 flex flex-col relative overflow-hidden">
             <Navbar />
 
             {/* Background elements */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -mr-64 -mt-64" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] -ml-64 -mb-64" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-orange-400 to-pink-500 opacity-20 rounded-full blur-[120px] -mr-64 -mt-64" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-pink-500 to-purple-600 opacity-20 rounded-full blur-[120px] -ml-64 -mb-64" />
 
             <div className="flex-grow flex items-center justify-center p-6 relative z-10 pt-32">
-                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 md:p-16 w-full max-w-xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)]">
+                <div className="bg-white backdrop-blur-2xl border border-orange-100 rounded-[40px] p-10 md:p-16 w-full max-w-xl shadow-[0_40px_80px_-20px_rgba(249,115,22,0.3)]">
                     <div className="text-center mb-12">
-                        <div className="w-20 h-20 bg-indigo-600 rounded-[28px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-500/20 transform rotate-12">
+                        <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-[28px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-orange-500/30 transform rotate-12">
                             <span className="text-white font-black text-4xl">P</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter italic">
-                            WELCOME <span className="text-indigo-500">BACK.</span>
+                        <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-4 tracking-tighter">
+                            WELCOME BACK
                         </h1>
                         <p className="text-zinc-500 font-bold uppercase text-[10px] tracking-[0.3em]">Sign in to your account</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-8">
                         <div className="space-y-3">
-                            <label htmlFor="email" className="text-[10px] uppercase font-black text-zinc-400 ml-1 tracking-[0.2em]">
+                            <label htmlFor="email" className="text-[10px] uppercase font-black text-orange-600 ml-1 tracking-[0.2em]">
                                 Email Address
                             </label>
                             <input
@@ -58,14 +58,14 @@ export default function LoginPage() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-[20px] font-bold text-sm text-white focus:border-indigo-500 focus:bg-white/10 transition-all outline-none placeholder-zinc-700"
-                                placeholder="commander@peaktech.com"
+                                className="w-full bg-orange-50 border-2 border-orange-100 px-6 py-5 rounded-[20px] font-bold text-sm text-zinc-900 focus:border-orange-500 focus:bg-white transition-all outline-none placeholder-zinc-400"
+                                placeholder="your@email.com"
                                 required
                             />
                         </div>
 
                         <div className="space-y-3">
-                            <label htmlFor="password" className="text-[10px] uppercase font-black text-zinc-400 ml-1 tracking-[0.2em]">
+                            <label htmlFor="password" className="text-[10px] uppercase font-black text-orange-600 ml-1 tracking-[0.2em]">
                                 Password
                             </label>
                             <input
@@ -73,7 +73,7 @@ export default function LoginPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-[20px] font-bold text-sm text-white focus:border-indigo-500 focus:bg-white/10 transition-all outline-none placeholder-zinc-700"
+                                className="w-full bg-orange-50 border-2 border-orange-100 px-6 py-5 rounded-[20px] font-bold text-sm text-zinc-900 focus:border-orange-500 focus:bg-white transition-all outline-none placeholder-zinc-400"
                                 placeholder="••••••••"
                                 required
                             />
@@ -82,40 +82,40 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-white text-zinc-950 py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] hover:bg-indigo-500 hover:text-white transition-all shadow-xl shadow-white/5 disabled:opacity-50 active:scale-[0.98]"
+                            className="w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] hover:from-orange-600 hover:to-pink-600 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-50 active:scale-[0.98]"
                         >
                             {loading ? 'Signing in...' : 'Sign In'}
                         </button>
 
                         <div className="relative py-4">
-                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-orange-100"></div></div>
                             <div className="relative flex justify-center text-[9px] font-black uppercase tracking-widest">
-                                <span className="px-4 bg-zinc-900 text-zinc-600">OR LOGIN WITH</span>
+                                <span className="px-4 bg-white text-zinc-400">OR LOGIN WITH</span>
                             </div>
                         </div>
 
                         <button
                             type="button"
                             disabled
-                            className="w-full bg-white/5 border border-white/10 text-white py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-white/10 transition-all active:scale-[0.98] opacity-50 cursor-not-allowed"
+                            className="w-full bg-orange-50 border-2 border-orange-100 text-zinc-600 py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-orange-100 transition-all active:scale-[0.98] opacity-50 cursor-not-allowed"
                         >
-                            <img src="https://www.google.com/favicon.ico" className="w-5 h-5 brightness-200" alt="Google" />
+                            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
                             Google Sign-in (Coming Soon)
                         </button>
                     </form>
 
                     <div className="mt-12 text-center text-[10px] font-black uppercase tracking-widest">
-                        <p className="text-zinc-600">
+                        <p className="text-zinc-500">
                             Don't have an account?{' '}
-                            <Link href="/register" className="text-indigo-500 hover:text-white transition-colors">
+                            <Link href="/register" className="text-orange-600 hover:text-pink-600 transition-colors">
                                 Create Account
                             </Link>
                         </p>
                     </div>
 
-                    <div className="mt-8 border-t border-white/5 pt-8 text-center">
-                        <Link href="/" className="text-zinc-700 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-colors">
-                            ← Cancel and Return Home
+                    <div className="mt-8 border-t border-orange-100 pt-8 text-center">
+                        <Link href="/" className="text-zinc-400 hover:text-orange-600 text-[10px] font-black uppercase tracking-[0.2em] transition-colors">
+                            ← Back to Home
                         </Link>
                     </div>
                 </div>
