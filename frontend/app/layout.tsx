@@ -1,12 +1,14 @@
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 
-const inter = Inter({
-  variable: "--font-inter",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 import type { Metadata } from "next";
@@ -46,7 +48,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} antialiased font-inter selection:bg-indigo-100 selection:text-indigo-900`}>
+      <body className={`${nunito.variable} antialiased font-nunito selection:bg-indigo-100 selection:text-indigo-900`}>
         <AuthProvider>
           {children}
           <Toaster position="top-right" />
