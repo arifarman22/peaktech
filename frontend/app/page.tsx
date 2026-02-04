@@ -315,25 +315,43 @@ export default function Home() {
         </section>
 
         {/* Section: Brands/Partners */}
-        <section className="py-20 bg-gradient-to-br from-orange-50 to-pink-50">
+        <section className="py-20 bg-gradient-to-br from-orange-50 to-pink-50 overflow-hidden">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-16">
               <h2 className="text-sm font-black uppercase tracking-[0.3em] text-orange-600 mb-4">Trusted By Industry Leaders</h2>
               <p className="text-zinc-600 font-medium">Partnering with the world's most innovative brands</p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-              {[
-                { name: 'Alibaba', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Alibaba_Group_Logo.svg' },
-                { name: 'Amazon', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
-                { name: 'eBay', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg' },
-                { name: 'Shopify', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg' },
-                { name: 'Walmart', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg' },
-                { name: 'Target', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg' }
-              ].map((brand, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 flex items-center justify-center h-24 border border-orange-100 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <img src={brand.logo} alt={brand.name} className="max-w-full max-h-12 object-contain grayscale hover:grayscale-0 transition-all" />
-                </div>
-              ))}
+            <div className="relative">
+              <style jsx>{`
+                @keyframes scroll {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+                .animate-scroll {
+                  animation: scroll 30s linear infinite;
+                }
+                .animate-scroll:hover {
+                  animation-play-state: paused;
+                }
+              `}</style>
+              <div className="flex animate-scroll">
+                {[...Array(2)].map((_, idx) => (
+                  <div key={idx} className="flex gap-8 min-w-max">
+                    {[
+                      { name: 'Alibaba', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Alibaba_Group_Logo.svg' },
+                      { name: 'Amazon', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
+                      { name: 'eBay', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg' },
+                      { name: 'Shopify', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg' },
+                      { name: 'Walmart', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg' },
+                      { name: 'Target', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg' }
+                    ].map((brand, i) => (
+                      <div key={i} className="bg-white rounded-2xl p-6 flex items-center justify-center w-48 h-24 border border-orange-100 hover:shadow-lg transition-all duration-300">
+                        <img src={brand.logo} alt={brand.name} className="max-w-full max-h-12 object-contain grayscale hover:grayscale-0 transition-all" />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
