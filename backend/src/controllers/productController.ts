@@ -54,12 +54,16 @@ export const getProducts = async (req: Request, res: Response) => {
 
         const skip = (Number(page) - 1) * Number(limit);
 
+        console.log('Product query:', JSON.stringify(query));
+
         const products = await Product.find(query)
             .populate('category', 'name slug')
             .sort(sort as string)
             .skip(skip)
             .limit(Number(limit))
             .lean();
+
+        console.log('Found products:', products.length);
 
         const total = await Product.countDocuments(query);
 
@@ -74,7 +78,7 @@ export const getProducts = async (req: Request, res: Response) => {
         }));
     } catch (error) {
         console.error('Get products error:', error);
-        return res.status(500).json(errorResponse('Failed to fetch products'));
+        return res.status(500).json(errorResponse('Failed to fetch products', error instanceof Error ? error.message : undefined));
     }
 };
 

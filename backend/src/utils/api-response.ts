@@ -14,9 +14,10 @@ export function successResponse(data: any, message: string = 'Success') {
 /**
  * Consistent error response format
  */
-export function errorResponse(message: string = 'Error', code: number = 400) {
+export function errorResponse(message: string = 'Error', details?: string) {
     return {
         success: false,
         error: message,
+        ...(details ? { details } : {}),
     };
 }
