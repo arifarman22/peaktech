@@ -313,6 +313,135 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Section: Brands/Partners */}
+        <section className="py-20 bg-gradient-to-br from-orange-50 to-pink-50">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-sm font-black uppercase tracking-[0.3em] text-orange-600 mb-4">Trusted By Industry Leaders</h2>
+              <p className="text-zinc-600 font-medium">Partnering with the world's most innovative brands</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+              {['Arduino', 'Raspberry Pi', 'ESP32', 'STM32', 'Nordic', 'Texas Instruments'].map((brand, i) => (
+                <div key={i} className="bg-white rounded-2xl p-6 flex items-center justify-center h-24 border border-orange-100 hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  <span className="font-black text-zinc-400 text-sm">{brand}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Stats/Trust Indicators */}
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { number: '50K+', label: 'Happy Customers', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+                { number: '10K+', label: 'Products Sold', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
+                { number: '99%', label: 'Satisfaction Rate', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { number: '24/7', label: 'Support Available', icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z' }
+              ].map((stat, i) => (
+                <div key={i} className="text-center group">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} />
+                    </svg>
+                  </div>
+                  <h3 className="text-3xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">{stat.number}</h3>
+                  <p className="text-sm font-bold text-zinc-600 uppercase tracking-wider">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Testimonials */}
+        <section className="py-24 bg-gradient-to-br from-purple-50 to-pink-50">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">What Our Customers Say</h2>
+              <p className="text-zinc-600 font-medium">Real feedback from real engineers and makers</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { name: 'Sarah Chen', role: 'Electronics Engineer', text: 'PeakTech has been my go-to supplier for all my prototyping needs. Quality products and fast shipping!', rating: 5 },
+                { name: 'Michael Rodriguez', role: 'Maker & Hobbyist', text: 'Amazing selection of components. The customer service team is incredibly helpful and knowledgeable.', rating: 5 },
+                { name: 'Emily Watson', role: 'IoT Developer', text: 'Best prices and authentic products. I\'ve recommended PeakTech to all my colleagues.', rating: 5 }
+              ].map((testimonial, i) => (
+                <div key={i} className="bg-white rounded-3xl p-8 border border-purple-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                  <div className="flex gap-1 mb-6">
+                    {[...Array(testimonial.rating)].map((_, j) => (
+                      <svg key={j} className="w-5 h-5 text-orange-500 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-zinc-700 font-medium mb-6 leading-relaxed">"{testimonial.text}"</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-black text-lg">{testimonial.name[0]}</span>
+                    </div>
+                    <div>
+                      <p className="font-black text-zinc-900">{testimonial.name}</p>
+                      <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section: CTA */}
+        <section className="py-32">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="relative rounded-[48px] overflow-hidden bg-gradient-to-br from-orange-600 via-pink-600 to-purple-600 p-16 md:p-24">
+              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000')] bg-cover bg-center opacity-10" />
+              <div className="relative z-10 text-center max-w-3xl mx-auto">
+                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight">Ready to Build Something Amazing?</h2>
+                <p className="text-white/90 text-lg md:text-xl font-medium mb-12 leading-relaxed">Join thousands of engineers, makers, and innovators who trust PeakTech for their electronic components.</p>
+                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <Link href="/shop" className="inline-flex h-16 items-center justify-center px-12 rounded-2xl bg-white text-orange-600 font-black text-sm uppercase tracking-widest hover:bg-orange-50 transition-all shadow-2xl hover:scale-105">
+                    Start Shopping
+                  </Link>
+                  <Link href="/register" className="inline-flex h-16 items-center justify-center px-12 rounded-2xl bg-white/10 backdrop-blur-sm border-2 border-white text-white font-black text-sm uppercase tracking-widest hover:bg-white/20 transition-all">
+                    Create Account
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Newsletter */}
+        <section className="py-24 bg-gradient-to-br from-orange-50 to-pink-50">
+          <div className="max-w-4xl mx-auto px-8 text-center">
+            <div className="bg-white rounded-[40px] p-12 md:p-16 border border-orange-100 shadow-xl">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-4">Stay Updated</h2>
+              <p className="text-zinc-600 font-medium mb-10 max-w-2xl mx-auto">Subscribe to our newsletter for exclusive deals, new product launches, and tech insights delivered to your inbox.</p>
+              <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  className="flex-grow px-6 py-5 rounded-2xl border-2 border-orange-100 font-bold text-sm focus:border-orange-500 focus:outline-none transition-all"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="px-10 py-5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:from-orange-600 hover:to-pink-600 transition-all shadow-lg hover:scale-105"
+                >
+                  Subscribe
+                </button>
+              </form>
+              <p className="text-xs text-zinc-400 font-medium mt-6">We respect your privacy. Unsubscribe anytime.</p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
