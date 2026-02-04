@@ -43,5 +43,9 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
         headers,
     });
 
-    return response;
+    if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+    }
+
+    return response.json();
 }

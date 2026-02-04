@@ -53,8 +53,7 @@ export default function Home() {
 
   const fetchCategories = async () => {
     try {
-      const res = await apiFetch('/categories');
-      const data = await res.json();
+      const data = await apiFetch('/categories');
       if (data.success) setCategories(data.data);
     } catch (error) {
       console.log("Error fetching categories");
@@ -70,8 +69,7 @@ export default function Home() {
       if (selectedCategory) url += `&category=${selectedCategory}`;
 
       console.log('Fetching products from:', url);
-      const res = await apiFetch(url);
-      const data = await res.json();
+      const data = await apiFetch(url);
       console.log('Products response:', data);
       if (data.success) {
         const filtered = data.data.products.filter((p: Product) =>
@@ -90,8 +88,7 @@ export default function Home() {
   const fetchTrending = async () => {
     try {
       console.log('Fetching trending products...');
-      const res = await apiFetch('/products?trending=true&limit=8');
-      const data = await res.json();
+      const data = await apiFetch('/products?trending=true&limit=8');
       console.log('Trending response:', data);
       if (data.success) setTrendingProducts(data.data.products);
     } catch (error) {
@@ -102,8 +99,7 @@ export default function Home() {
   const fetchBestSellers = async () => {
     try {
       console.log('Fetching best sellers...');
-      const res = await apiFetch('/products?topSeller=true&limit=8');
-      const data = await res.json();
+      const data = await apiFetch('/products?topSeller=true&limit=8');
       console.log('Best sellers response:', data);
       if (data.success) setBestSellers(data.data.products);
     } catch (error) {
@@ -114,8 +110,7 @@ export default function Home() {
   const fetchTopRated = async () => {
     try {
       console.log('Fetching top rated...');
-      const res = await apiFetch('/products?featured=true&limit=8');
-      const data = await res.json();
+      const data = await apiFetch('/products?featured=true&limit=8');
       console.log('Top rated response:', data);
       if (data.success) setTopRated(data.data.products);
     } catch (error) {
