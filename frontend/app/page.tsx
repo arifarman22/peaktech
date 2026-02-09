@@ -434,7 +434,7 @@ export default function Home() {
             <div className="relative rounded-[48px] overflow-hidden bg-[var(--color-primary)] p-16 md:p-24">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000')] bg-cover bg-center opacity-10" />
               <div className="relative z-10 text-center max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight">Ready to Build Something Amazing?</h2>
+                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight !text-white">Ready to Build Something Amazing?</h2>
                 <p className="text-white/90 text-lg md:text-xl font-medium mb-12 leading-relaxed">Join thousands of engineers, makers, and innovators who trust PeakTech for their electronic components.</p>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <Link href="/shop" className="inline-flex h-16 items-center justify-center px-12 rounded-2xl bg-[var(--color-accent)] text-white font-black text-sm uppercase tracking-widest hover:bg-[var(--color-accent-hover)] transition-all shadow-2xl hover:scale-105">
