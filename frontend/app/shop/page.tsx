@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiFetch } from '@/lib/utils/api';
 import Footer from '@/components/Footer';
+import toast from 'react-hot-toast';
 
 interface Product {
     _id: string;
@@ -334,6 +335,40 @@ export default function ShopPage() {
 }
 
 function ProductCard({ product }: { product: Product }) {
+    const addToCart = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            const data = await apiFetch('/cart', {
+                method: 'POST',
+                body: JSON.stringify({ productId: product._id, quantity: 1 }),
+            });
+            if (data.success) {
+                toast.success('Added to cart');
+            } else {
+                toast.error(data.error || 'Failed to add');
+            }
+        } catch (error) {
+            toast.error('Please login to add to cart');
+        }
+    };
+
+    const buyNow = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            const data = await apiFetch('/cart', {
+                method: 'POST',
+                body: JSON.stringify({ productId: product._id, quantity: 1 }),
+            });
+            if (data.success) {
+                window.location.href = '/checkout';
+            } else {
+                toast.error(data.error || 'Failed');
+            }
+        } catch (error) {
+            toast.error('Please login to continue');
+        }
+    };
+
     return (
         <div className="group bg-white rounded-2xl border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-black">
             <div className="relative aspect-square rounded-xl overflow-hidden bg-white mb-3 transition-all duration-500 group-hover:shadow-lg">
@@ -357,11 +392,25 @@ function ProductCard({ product }: { product: Product }) {
                 <Link href={`/products/${product.slug}`}>
                     <h3 className="text-sm font-semibold text-zinc-900 mb-2 line-clamp-2 hover:text-zinc-600 transition-colors">{product.name}</h3>
                 </Link>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-3">
                     <span className="text-lg font-bold text-zinc-900">৳{product.price.toLocaleString()}</span>
                     {product.compareAtPrice && product.compareAtPrice > product.price && (
                         <span className="text-sm text-zinc-400 line-through font-medium">৳{product.compareAtPrice.toLocaleString()}</span>
                     )}
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                    <button
+                        onClick={addToCart}
+                        className="px-3 py-2 bg-zinc-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all active:scale-95"
+                    >
+                        Add to Cart
+                    </button>
+                    <button
+                        onClick={buyNow}
+                        className="px-3 py-2 bg-white border-2 border-zinc-900 text-zinc-900 rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-zinc-900 hover:text-white transition-all active:scale-95"
+                    >
+                        Buy Now
+                    </button>
                 </div>
             </div>
         </div>

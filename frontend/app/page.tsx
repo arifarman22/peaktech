@@ -9,6 +9,7 @@ import QuickViewModal from "@/components/QuickViewModal";
 import BannerSlider from "@/components/BannerSlider";
 import CategorySlider from "@/components/CategorySlider";
 import Loader from "@/components/Loader";
+import toast from 'react-hot-toast';
 
 interface Product {
   _id: string;
@@ -518,6 +519,40 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
     }
   };
 
+  const addToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      const data = await apiFetch('/cart', {
+        method: 'POST',
+        body: JSON.stringify({ productId: product._id, quantity: 1 }),
+      });
+      if (data.success) {
+        toast.success('Added to cart');
+      } else {
+        toast.error(data.error || 'Failed to add');
+      }
+    } catch (error) {
+      toast.error('Please login to add to cart');
+    }
+  };
+
+  const buyNow = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      const data = await apiFetch('/cart', {
+        method: 'POST',
+        body: JSON.stringify({ productId: product._id, quantity: 1 }),
+      });
+      if (data.success) {
+        window.location.href = '/checkout';
+      } else {
+        toast.error(data.error || 'Failed');
+      }
+    } catch (error) {
+      toast.error('Please login to continue');
+    }
+  };
+
   return (
     <div className="group bg-white rounded-[32px] border border-zinc-200/60 p-3 transition-all duration-500 hover:shadow-xl hover:border-black">
       <div className="relative aspect-square rounded-[28px] overflow-hidden bg-white mb-4 transform transition-all duration-700 group-hover:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.2)] group-hover:-translate-y-1">
@@ -561,16 +596,25 @@ function ProductCard({ product, onQuickView }: { product: Product; onQuickView: 
         <Link href={`/products/${product.slug}`}>
           <h3 className="font-bold text-zinc-900 mb-2 line-clamp-2 hover:text-orange-600 transition-colors duration-300 h-10 text-sm">{product.name}</h3>
         </Link>
-        <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">৳{product.price.toLocaleString()}</span>
-            {product.compareAtPrice && product.compareAtPrice > product.price && (
-              <span className="text-xs text-zinc-400 line-through font-bold">৳{product.compareAtPrice.toLocaleString()}</span>
-            )}
-          </div>
-          <Link href={`/products/${product.slug}`} className="text-[10px] font-black uppercase tracking-widest text-orange-400 hover:text-orange-600 transition-colors">
-            View →
-          </Link>
+        <div className="flex items-baseline gap-2 mb-4">
+          <span className="text-lg font-black text-zinc-900">৳{product.price.toLocaleString()}</span>
+          {product.compareAtPrice && product.compareAtPrice > product.price && (
+            <span className="text-xs text-zinc-400 line-through font-bold">৳{product.compareAtPrice.toLocaleString()}</span>
+          )}
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={addToCart}
+            className="px-3 py-2 bg-zinc-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all active:scale-95"
+          >
+            Add to Cart
+          </button>
+          <button
+            onClick={buyNow}
+            className="px-3 py-2 bg-white border-2 border-zinc-900 text-zinc-900 rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-zinc-900 hover:text-white transition-all active:scale-95"
+          >
+            Buy Now
+          </button>
         </div>
       </div>
     </div>
