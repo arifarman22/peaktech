@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthenticatedRequest } from '../utils/middleware';
 import Review from '../models/Review';
 import Product from '../models/Product';
 
-export const createReview = async (req: Request, res: Response) => {
+export const createReview = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { productId, rating, comment } = req.body;
         const userId = req.user?.id;
@@ -45,7 +46,7 @@ export const createReview = async (req: Request, res: Response) => {
     }
 };
 
-export const getProductReviews = async (req: Request, res: Response) => {
+export const getProductReviews = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { productId } = req.params;
 
@@ -76,7 +77,7 @@ export const getProductReviews = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteReview = async (req: Request, res: Response) => {
+export const deleteReview = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { id } = req.params;
         const userId = req.user?.id;
