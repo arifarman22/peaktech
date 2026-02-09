@@ -6,7 +6,7 @@ import Product from '../models/Product';
 export const createReview = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { productId, rating, comment } = req.body;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
 
         if (!userId) {
             return res.status(401).json({ success: false, error: 'Authentication required' });
@@ -80,7 +80,7 @@ export const getProductReviews = async (req: AuthenticatedRequest, res: Response
 export const deleteReview = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const { id } = req.params;
-        const userId = req.user?.id;
+        const userId = req.user?.userId;
 
         if (!userId) {
             return res.status(401).json({ success: false, error: 'Authentication required' });

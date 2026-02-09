@@ -1,104 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #1F2933;
-
-  --primary: #0A2540;
-  --primary-foreground: #FFFFFF;
-
-  --secondary: #F8FAFC;
-  --secondary-foreground: #1F2933;
-
-  --accent: #2EC4B6;
-  --accent-foreground: #FFFFFF;
-  --accent-hover: #26A69A;
-
-  --muted: #F8FAFC;
-  --muted-foreground: #6B7280;
-
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-
-  --border: #E5E7EB;
-  --input: #E5E7EB;
-  --ring: #2EC4B6;
-
-  --card: #F8FAFC;
-  --card-foreground: #1F2933;
-
+  /* Theme Tokens - Deep Blue + Cyan */
+  --color-primary: #0A2540;
+  --color-accent: #2EC4B6;
+  --color-bg-main: #FFFFFF;
+  --color-bg-card: #F8FAFC;
+  --color-text-primary: #1F2933;
+  --color-text-muted: #6B7280;
+  --color-border: #E5E7EB;
+  
+  /* Derived tokens */
+  --color-accent-hover: #26A69A;
+  --color-destructive: #EF4444;
   --radius: 0.5rem;
-
-  --font-nunito: var(--font-nunito);
 }
 
-.dark {
-  --background: #09090b;
-  --foreground: #fafafa;
 
-  --primary: #fb923c;
-  --primary-foreground: #ffffff;
-
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #fb923c;
-}
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-border: var(--border);
-  --font-nunito: var(--font-nunito);
+  --color-primary: var(--color-primary);
+  --color-accent: var(--color-accent);
+  --color-bg-main: var(--color-bg-main);
+  --color-bg-card: var(--color-bg-card);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
   --radius: var(--radius);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-nunito), 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
 }
 
-/* Lighter headings */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 400;
+  color: var(--color-primary);
 }
 
 .glass {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-}
-
-.dark .glass {
-  background: rgba(9, 9, 11, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .premium-shadow {
   box-shadow: 0 4px 6px -1px rgba(10, 37, 64, 0.1), 0 2px 4px -1px rgba(10, 37, 64, 0.06);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* Smooth scrolling */
@@ -113,14 +64,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--secondary);
+  background: var(--color-bg-card);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
+  background: var(--color-primary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: var(--color-accent);
 }

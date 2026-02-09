@@ -41,7 +41,7 @@ export default function BannerSlider() {
     }, []);
 
     return (
-        <section className="relative h-[85vh] w-full overflow-hidden bg-zinc-950">
+        <section className="relative h-[85vh] w-full overflow-hidden bg-[var(--color-primary)]">
             {banners.map((banner, idx) => (
                 <div
                     key={banner.id}
