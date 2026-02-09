@@ -1,29 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
+  --background: #FFFFFF;
+  --foreground: #1F2933;
 
-  --primary: #18181b;
-  --primary-foreground: #ffffff;
+  --primary: #0A2540;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
+  --secondary: #F8FAFC;
+  --secondary-foreground: #1F2933;
 
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --accent: #2EC4B6;
+  --accent-foreground: #FFFFFF;
+  --accent-hover: #26A69A;
 
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
+  --muted: #F8FAFC;
+  --muted-foreground: #6B7280;
 
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
 
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #18181b;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #2EC4B6;
 
-  --radius: 1rem;
+  --card: #F8FAFC;
+  --card-foreground: #1F2933;
+
+  --radius: 0.5rem;
 
   --font-nunito: var(--font-nunito);
 }
@@ -62,8 +66,7 @@
 }
 
 body {
-  background: #ffffff;
-  background-attachment: fixed;
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-nunito), 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -77,10 +80,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(24, 24, 27, 0.1);
+  border: 1px solid var(--border);
 }
 
 .dark .glass {
@@ -89,11 +92,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .premium-shadow {
-  box-shadow: 0 4px 6px -1px rgba(24, 24, 27, 0.1), 0 2px 4px -1px rgba(24, 24, 27, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(10, 37, 64, 0.1), 0 2px 4px -1px rgba(10, 37, 64, 0.06);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #18181b 0%, #3f3f46 50%, #52525b 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -110,14 +113,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f4f5;
+  background: var(--secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #18181b;
+  background: var(--primary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: var(--accent);
 }
