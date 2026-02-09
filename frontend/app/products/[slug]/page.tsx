@@ -17,8 +17,16 @@ interface Product {
     compareAtPrice?: number;
     quantity: number;
     images: string[];
-    category: { name: string; slug: string };
+    category: { _id: string; name: string; slug: string };
     sizes?: string[];
+}
+
+interface Review {
+    _id: string;
+    user: { name: string; email: string };
+    rating: number;
+    comment: string;
+    createdAt: string;
 }
 
 export default function ProductDetailsPage() {
@@ -28,10 +36,23 @@ export default function ProductDetailsPage() {
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [avgRating, setAvgRating] = useState(0);
+    const [totalReviews, setTotalReviews] = useState(0);
+    const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+    const [rating, setRating] = useState(5);
+    const [comment, setComment] = useState('');
 
     useEffect(() => {
         fetchProduct();
     }, [params.slug]);
+
+    useEffect(() => {
+        if (product) {
+            fetchReviews();
+            fetchSimilarProducts();
+        }
+    }, [product]);
 
     const fetchProduct = async () => {
         try {
@@ -57,6 +78,50 @@ export default function ProductDetailsPage() {
             }
         } catch (error) {
             toast.error('Identity required for acquisition');
+        }
+    };
+
+    const fetchReviews = async () => {
+        try {
+            const data = await apiFetch(`/reviews/product/${product?._id}`);
+            if (data.success) {
+                setReviews(data.data.reviews);
+                setAvgRating(data.data.avgRating);
+                setTotalReviews(data.data.totalReviews);
+            }
+        } catch (error) {
+            console.error('Failed to fetch reviews');
+        }
+    };
+
+    const fetchSimilarProducts = async () => {
+        try {
+            const data = await apiFetch(`/products?category=${product?.category._id}&limit=4`);
+            if (data.success) {
+                setSimilarProducts(data.data.products.filter((p: Product) => p._id !== product?._id).slice(0, 4));
+            }
+        } catch (error) {
+            console.error('Failed to fetch similar products');
+        }
+    };
+
+    const submitReview = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const data = await apiFetch('/reviews', {
+                method: 'POST',
+                body: JSON.stringify({ productId: product?._id, rating, comment }),
+            });
+            if (data.success) {
+                toast.success('Review submitted');
+                setComment('');
+                setRating(5);
+                fetchReviews();
+            } else {
+                toast.error(data.error || 'Failed to submit review');
+            }
+        } catch (error) {
+            toast.error('Please login to submit a review');
         }
     };
 
@@ -199,6 +264,115 @@ export default function ProductDetailsPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Reviews Section */}
+                    <div className="mt-32">
+                        <div className="border-t border-zinc-100 pt-16">
+                            <h2 className="text-3xl font-bold mb-8">Customer Reviews</h2>
+                            
+                            {avgRating > 0 && (
+                                <div className="flex items-center gap-6 mb-12 p-6 bg-zinc-50 rounded-2xl w-fit">
+                                    <div className="text-center">
+                                        <div className="text-4xl font-black mb-2">{avgRating}</div>
+                                        <div className="flex gap-1">
+                                            {[...Array(5)].map((_, i) => (
+                                                <svg key={i} className={`w-5 h-5 ${i < Math.round(avgRating) ? 'text-yellow-400 fill-current' : 'text-zinc-300'}`} viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="text-sm text-zinc-600">
+                                        <div className="font-bold">{totalReviews} Reviews</div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Review Form */}
+                            <form onSubmit={submitReview} className="mb-12 p-8 bg-zinc-50 rounded-2xl">
+                                <h3 className="text-xl font-bold mb-6">Write a Review</h3>
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium mb-3">Rating</label>
+                                    <div className="flex gap-2">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <button
+                                                key={star}
+                                                type="button"
+                                                onClick={() => setRating(star)}
+                                                className="text-3xl transition-colors"
+                                            >
+                                                <svg className={`w-8 h-8 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-zinc-300'}`} viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium mb-3">Comment</label>
+                                    <textarea
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                        required
+                                        rows={4}
+                                        className="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:border-zinc-900 focus:outline-none"
+                                        placeholder="Share your experience with this product..."
+                                    />
+                                </div>
+                                <button type="submit" className="px-8 py-3 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors">
+                                    Submit Review
+                                </button>
+                            </form>
+
+                            {/* Reviews List */}
+                            <div className="space-y-6">
+                                {reviews.length === 0 ? (
+                                    <p className="text-zinc-500 text-center py-12">No reviews yet. Be the first to review!</p>
+                                ) : (
+                                    reviews.map((review) => (
+                                        <div key={review._id} className="p-6 border border-zinc-100 rounded-2xl">
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div>
+                                                    <div className="font-bold text-lg">{review.user.name}</div>
+                                                    <div className="flex gap-1 mt-2">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <svg key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-zinc-300'}`} viewBox="0 0 20 20">
+                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            </svg>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="text-sm text-zinc-500">
+                                                    {new Date(review.createdAt).toLocaleDateString()}
+                                                </div>
+                                            </div>
+                                            <p className="text-zinc-700 leading-relaxed">{review.comment}</p>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Similar Products */}
+                    {similarProducts.length > 0 && (
+                        <div className="mt-32">
+                            <div className="border-t border-zinc-100 pt-16">
+                                <h2 className="text-3xl font-bold mb-12">Similar Products</h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                    {similarProducts.map((p) => (
+                                        <Link key={p._id} href={`/products/${p.slug}`} className="group">
+                                            <div className="aspect-square bg-zinc-50 rounded-2xl overflow-hidden mb-4">
+                                                <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                            </div>
+                                            <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-zinc-600 transition-colors">{p.name}</h3>
+                                            <div className="text-xl font-black">৳{p.price.toLocaleString()}</div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />

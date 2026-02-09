@@ -17,6 +17,7 @@ import couponRoutes from './routes/couponRoutes';
 import adminRoutes from './routes/admin/adminRoutes';
 import dashboardRoutes from './routes/dashboardRoutes';
 import wishlistRoutes from './routes/wishlistRoutes';
+import reviewRoutes from './routes/reviewRoutes';
 import { loadEnv } from './config/env';
 
 const app = express();
@@ -110,6 +111,7 @@ app.use('/api/coupons', ensureDB, couponRoutes);
 app.use('/api/admin', ensureDB, adminRoutes);
 app.use('/api/admin/dashboard', ensureDB, dashboardRoutes);
 app.use('/api/wishlist', ensureDB, wishlistRoutes);
+app.use('/api/reviews', ensureDB, reviewRoutes);
 
 // Error handler
 app.use((err: any, req: any, res: any, next: any) => {
