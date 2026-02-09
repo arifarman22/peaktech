@@ -48,11 +48,11 @@ export default function ProductDetailsPage() {
     }, [params.slug]);
 
     useEffect(() => {
-        if (product) {
+        if (product?._id) {
             fetchReviews();
             fetchSimilarProducts();
         }
-    }, [product]);
+    }, [product?._id]);
 
     const fetchProduct = async () => {
         try {
@@ -82,8 +82,9 @@ export default function ProductDetailsPage() {
     };
 
     const fetchReviews = async () => {
+        if (!product?._id) return;
         try {
-            const data = await apiFetch(`/reviews/product/${product?._id}`);
+            const data = await apiFetch(`/reviews/product/${product._id}`);
             if (data.success) {
                 setReviews(data.data.reviews);
                 setAvgRating(data.data.avgRating);
@@ -95,10 +96,11 @@ export default function ProductDetailsPage() {
     };
 
     const fetchSimilarProducts = async () => {
+        if (!product?.category._id) return;
         try {
-            const data = await apiFetch(`/products?category=${product?.category._id}&limit=4`);
+            const data = await apiFetch(`/products?category=${product.category._id}&limit=4`);
             if (data.success) {
-                setSimilarProducts(data.data.products.filter((p: Product) => p._id !== product?._id).slice(0, 4));
+                setSimilarProducts(data.data.products.filter((p: Product) => p._id !== product._id).slice(0, 4));
             }
         } catch (error) {
             console.error('Failed to fetch similar products');
