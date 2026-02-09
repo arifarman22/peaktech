@@ -170,7 +170,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000')] bg-cover bg-center opacity-20" />
               <div className="relative z-20 h-full flex flex-col justify-center px-12 md:px-20 max-w-2xl">
                 <span className="text-[var(--color-accent)] font-black uppercase tracking-[0.2em] text-[10px] mb-6">Expertise Defined</span>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">PRECISION PARTS FOR INDUSTRIAL CRAFT.</h2>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight !text-white">PRECISION PARTS FOR INDUSTRIAL CRAFT.</h2>
                 <p className="text-white/80 text-lg mb-10 font-medium">We engineering solutions that power high-performance machinery across global industries.</p>
                 <Link href="/shop?category=machinery" className="inline-flex h-14 items-center justify-center px-10 rounded-2xl bg-[var(--color-accent)] text-white font-black text-xs uppercase tracking-widest hover:bg-[var(--color-accent-hover)] transition-all w-fit shadow-xl">
                   Explore Machinery
