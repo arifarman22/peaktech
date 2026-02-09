@@ -11,6 +11,14 @@ export const createReview = async (req: Request, res: Response) => {
             return res.status(401).json({ success: false, error: 'Authentication required' });
         }
 
+        if (!productId || !rating || !comment) {
+            return res.status(400).json({ success: false, error: 'Missing required fields' });
+        }
+
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ success: false, error: 'Rating must be between 1 and 5' });
+        }
+
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ success: false, error: 'Product not found' });
@@ -32,7 +40,8 @@ export const createReview = async (req: Request, res: Response) => {
 
         res.status(201).json({ success: true, data: populatedReview });
     } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Create review error:', error);
+        res.status(500).json({ success: false, error: 'Failed to create review', message: error.message });
     }
 };
 
@@ -40,9 +49,14 @@ export const getProductReviews = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
 
+        if (!productId) {
+            return res.status(400).json({ success: false, error: 'Product ID is required' });
+        }
+
         const reviews = await Review.find({ product: productId })
             .populate('user', 'name email')
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .lean();
 
         const avgRating = reviews.length > 0
             ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
@@ -51,13 +65,14 @@ export const getProductReviews = async (req: Request, res: Response) => {
         res.json({
             success: true,
             data: {
-                reviews,
+                reviews: reviews || [],
                 avgRating: Math.round(avgRating * 10) / 10,
                 totalReviews: reviews.length,
             },
         });
     } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Get reviews error:', error);
+        res.status(500).json({ success: false, error: 'Failed to fetch reviews', message: error.message });
     }
 };
 
@@ -65,6 +80,14 @@ export const deleteReview = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+
+        if (!id) {
+            return res.status(400).json({ success: false, error: 'Review ID is required' });
+        }
 
         const review = await Review.findById(id);
         if (!review) {
@@ -78,6 +101,7 @@ export const deleteReview = async (req: Request, res: Response) => {
         await review.deleteOne();
         res.json({ success: true, message: 'Review deleted' });
     } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Delete review error:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete review', message: error.message });
     }
 };

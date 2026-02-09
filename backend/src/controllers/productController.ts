@@ -58,8 +58,6 @@ export const getProducts = async (req: Request, res: Response) => {
 
         const skip = (Number(page) - 1) * Number(limit);
 
-        console.log('Product query:', JSON.stringify(query));
-
         const products = await Product.find(query)
             .populate('category', 'name slug')
             .sort(sort as string)
@@ -67,12 +65,10 @@ export const getProducts = async (req: Request, res: Response) => {
             .limit(Number(limit))
             .lean();
 
-        console.log('Found products:', products.length);
-
         const total = await Product.countDocuments(query);
 
         return res.json(successResponse({
-            products,
+            products: products || [],
             pagination: {
                 total,
                 page: Number(page),
@@ -81,7 +77,11 @@ export const getProducts = async (req: Request, res: Response) => {
             }
         }));
     } catch (error) {
-        console.error('Get products error:', error);
+        console.error('Get products error:', {
+            error: error instanceof Error ? error.message : error,
+            stack: error instanceof Error ? error.stack : undefined,
+            query: req.query
+        });
         return res.status(500).json(errorResponse('Failed to fetch products', error instanceof Error ? error.message : undefined));
     }
 };

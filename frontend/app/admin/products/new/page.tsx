@@ -41,8 +41,7 @@ export default function ProductFormPage() {
     }, []);
 
     const fetchCategories = async () => {
-        const res = await apiFetch('/categories');
-        const data = await res.json();
+        const data = await apiFetch('/categories');
         if (data.success) setCategories(data.data);
     };
 
@@ -83,12 +82,11 @@ export default function ProductFormPage() {
                 reader.onloadend = async () => {
                     try {
                         const base64 = reader.result as string;
-                        const res = await apiFetch('/admin/uploads', {
+                        const data = await apiFetch('/admin/uploads', {
                             method: 'POST',
                             body: JSON.stringify({ file: base64, folder: 'peaktech/products' }),
                         });
                         
-                        const data = await res.json();
                         if (data.success) {
                             setFormData(prev => ({ ...prev, images: [...prev.images, data.data.url] }));
                             if (errors.images) setErrors(prev => ({ ...prev, images: '' }));
@@ -144,7 +142,7 @@ export default function ProductFormPage() {
 
         setSubmitting(true);
         try {
-            const res = await apiFetch('/products', {
+            const data = await apiFetch('/products', {
                 method: 'POST',
                 body: JSON.stringify({
                     ...formData,
@@ -154,7 +152,6 @@ export default function ProductFormPage() {
                 }),
             });
 
-            const data = await res.json();
             if (data.success) {
                 toast.success('Product created successfully');
                 router.push('/admin/products');
