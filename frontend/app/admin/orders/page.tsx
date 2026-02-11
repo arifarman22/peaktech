@@ -47,10 +47,12 @@ export default function AdminOrdersPage() {
         try {
             const data = await apiFetch('/admin/orders');
             if (data.success) {
-                setOrders(data.data);
+                setOrders(data.data || []);
             }
         } catch (error) {
+            console.error('Orders fetch error:', error);
             toast.error('Failed to load orders');
+            setOrders([]);
         } finally {
             setLoading(false);
         }
@@ -105,10 +107,10 @@ export default function AdminOrdersPage() {
                             <div className="flex items-center gap-6">
                                 {/* Product Images Preview */}
                                 <div className="flex -space-x-2">
-                                    {order.items.slice(0, 3).map((item, idx) => (
-                                        <img key={idx} src={item.product.images[0]} alt="" className="w-12 h-12 rounded-lg border-2 border-white object-cover shadow-sm" />
+                                    {order.items?.slice(0, 3).map((item, idx) => (
+                                        <img key={idx} src={item.product?.images?.[0] || '/placeholder.png'} alt="" className="w-12 h-12 rounded-lg border-2 border-white object-cover shadow-sm" />
                                     ))}
-                                    {order.items.length > 3 && (
+                                    {order.items?.length > 3 && (
                                         <div className="w-12 h-12 rounded-lg border-2 border-white bg-[var(--color-primary)] text-white flex items-center justify-center text-xs font-bold shadow-sm">+{order.items.length - 3}</div>
                                     )}
                                 </div>
@@ -125,7 +127,7 @@ export default function AdminOrdersPage() {
                                 <div className="h-12 w-px bg-[var(--color-border)]" />
                                 <div>
                                     <p className="text-sm text-[var(--color-text-muted)]">Items</p>
-                                    <p className="font-bold text-[var(--color-text-primary)]">{order.items.length} product{order.items.length > 1 ? 's' : ''}</p>
+                                    <p className="font-bold text-[var(--color-text-primary)]">{order.items?.length || 0} product{(order.items?.length || 0) > 1 ? 's' : ''}</p>
                                 </div>
                                 <div className="h-12 w-px bg-[var(--color-border)]" />
                                 <div>
@@ -176,8 +178,8 @@ export default function AdminOrdersPage() {
                                     </div>
                                     <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
                                         <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Total Items</p>
-                                        <p className="font-bold text-[var(--color-text-primary)] text-2xl">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
-                                        <p className="text-sm text-[var(--color-text-muted)]">{order.items.length} product{order.items.length > 1 ? 's' : ''}</p>
+                                        <p className="font-bold text-[var(--color-text-primary)] text-2xl">{order.items?.reduce((sum, item) => sum + item.quantity, 0) || 0}</p>
+                                        <p className="text-sm text-[var(--color-text-muted)]">{order.items?.length || 0} product{(order.items?.length || 0) > 1 ? 's' : ''}</p>
                                     </div>
                                     <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
                                         <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Order Total</p>
@@ -229,9 +231,9 @@ export default function AdminOrdersPage() {
                                         <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Order Items</h3>
                                     </div>
                                     <div className="space-y-3">
-                                        {order.items.map((item, idx) => (
+                                        {order.items?.map((item, idx) => (
                                             <div key={idx} className="flex items-center gap-4 p-4 bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] hover:shadow-sm transition">
-                                                <img src={item.product.images[0]} alt={item.product.name} className="w-20 h-20 object-cover rounded-lg shadow-sm" />
+                                                <img src={item.product?.images?.[0] || '/placeholder.png'} alt={item.product?.name || 'Product'} className="w-20 h-20 object-cover rounded-lg shadow-sm" />
                                                 <div className="flex-grow">
                                                     <p className="font-bold text-[var(--color-text-primary)]">{item.product.name}</p>
                                                     <div className="flex items-center gap-4 mt-2">
