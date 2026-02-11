@@ -17,6 +17,7 @@ interface DashboardStats {
         total: number;
         orderStatus: string;
         user: { name: string };
+        createdAt: string;
     }>;
 }
 
@@ -41,61 +42,95 @@ export default function AdminDashboard() {
         }
     };
 
-    if (loading) return <div className="text-center py-20">Loading...</div>;
+    if (loading) return <div className="flex items-center justify-center h-96"><div className="w-16 h-16 border-4 border-[var(--color-accent)]/20 border-t-[var(--color-accent)] rounded-full animate-spin" /></div>;
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-8">Dashboard Overview</h1>
+            <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-8">Dashboard Overview</h1>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {[
-                    { label: 'Total Revenue', value: `$${data?.stats.totalSales.toFixed(2) || 0}`, icon: '💰', color: 'bg-green-100 text-green-600' },
-                    { label: 'Orders', value: data?.stats.orderCount || 0, icon: '📦', color: 'bg-blue-100 text-blue-600' },
-                    { label: 'Products', value: data?.stats.productCount || 0, icon: '📱', color: 'bg-purple-100 text-purple-600' },
-                    { label: 'Users', value: data?.stats.userCount || 0, icon: '👥', color: 'bg-orange-100 text-orange-600' },
+                    { label: 'Total Revenue', value: `৳${data?.stats.totalSales.toFixed(2) || 0}`, icon: '💰', color: 'bg-green-50 text-green-600 border-green-200' },
+                    { label: 'Orders', value: data?.stats.orderCount || 0, icon: '📦', color: 'bg-blue-50 text-blue-600 border-blue-200' },
+                    { label: 'Products', value: data?.stats.productCount || 0, icon: '📱', color: 'bg-purple-50 text-purple-600 border-purple-200' },
+                    { label: 'Users', value: data?.stats.userCount || 0, icon: '👥', color: 'bg-orange-50 text-orange-600 border-orange-200' },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-xl shadow-sm border">
-                        <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center text-2xl mb-4`}>
+                    <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-[var(--color-border)] hover:shadow-md transition">
+                        <div className={`w-14 h-14 ${stat.color} border rounded-xl flex items-center justify-center text-3xl mb-4`}>
                             {stat.icon}
                         </div>
-                        <p className="text-sm font-medium text-gray-500 uppercase">{stat.label}</p>
-                        <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                        <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">{stat.label}</p>
+                        <p className="text-3xl font-bold text-[var(--color-text-primary)] mt-2">{stat.value}</p>
                     </div>
                 ))}
             </div>
 
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <Link href="/admin/products/new" className="bg-[var(--color-accent)] text-white p-6 rounded-2xl shadow-lg hover:bg-[var(--color-accent-hover)] transition group">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">➕</div>
+                        <div>
+                            <p className="font-bold text-lg">Add Product</p>
+                            <p className="text-sm text-white/80">Create new product</p>
+                        </div>
+                    </div>
+                </Link>
+                <Link href="/admin/orders" className="bg-[var(--color-primary)] text-white p-6 rounded-2xl shadow-lg hover:opacity-90 transition group">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">📋</div>
+                        <div>
+                            <p className="font-bold text-lg">Manage Orders</p>
+                            <p className="text-sm text-white/80">View all orders</p>
+                        </div>
+                    </div>
+                </Link>
+                <Link href="/admin/categories" className="bg-white border-2 border-[var(--color-primary)] text-[var(--color-primary)] p-6 rounded-2xl shadow-sm hover:bg-[var(--color-bg-card)] transition group">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-[var(--color-primary)]/10 rounded-xl flex items-center justify-center text-2xl">📂</div>
+                        <div>
+                            <p className="font-bold text-lg">Categories</p>
+                            <p className="text-sm text-[var(--color-text-muted)]">Manage categories</p>
+                        </div>
+                    </div>
+                </Link>
+            </div>
+
             {/* Recent Orders */}
-            <div className="bg-white rounded-xl shadow-sm border">
-                <div className="p-6 border-b flex justify-between items-center">
-                    <h2 className="text-xl font-bold">Recent Orders</h2>
-                    <Link href="/admin/orders" className="text-purple-600 font-medium hover:underline">View All</Link>
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--color-border)]">
+                <div className="p-6 border-b border-[var(--color-border)] flex justify-between items-center">
+                    <h2 className="text-xl font-bold text-[var(--color-primary)]">Recent Orders</h2>
+                    <Link href="/admin/orders" className="text-[var(--color-accent)] font-bold hover:text-[var(--color-accent-hover)] transition">View All →</Link>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-[var(--color-bg-card)]">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Order #</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Customer</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Amount</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Date</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y">
+                        <tbody className="divide-y divide-[var(--color-border)]">
                             {data?.recentOrders.map((order) => (
-                                <tr key={order._id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 font-mono text-sm">{order.orderNumber}</td>
-                                    <td className="px-6 py-4 text-sm">{order.user?.name || 'Guest'}</td>
-                                    <td className="px-6 py-4 font-medium text-sm">${order.total.toFixed(2)}</td>
+                                <tr key={order._id} className="hover:bg-[var(--color-bg-card)] transition">
+                                    <td className="px-6 py-4 font-mono font-bold text-[var(--color-primary)] text-sm">{order.orderNumber}</td>
+                                    <td className="px-6 py-4 text-sm text-[var(--color-text-primary)]">{order.user?.name || 'Guest'}</td>
+                                    <td className="px-6 py-4 font-bold text-sm text-[var(--color-accent)]">৳{order.total.toFixed(2)}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                            order.orderStatus === 'completed' ? 'bg-green-100 text-green-600' :
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                            order.orderStatus === 'completed' || order.orderStatus === 'delivered' ? 'bg-green-100 text-green-600' :
                                             order.orderStatus === 'cancelled' ? 'bg-red-100 text-red-600' :
-                                            'bg-blue-100 text-blue-600'
+                                            order.orderStatus === 'shipped' ? 'bg-blue-100 text-blue-600' :
+                                            'bg-yellow-100 text-yellow-600'
                                         }`}>
                                             {order.orderStatus}
                                         </span>
                                     </td>
+                                    <td className="px-6 py-4 text-sm text-[var(--color-text-muted)]">{new Date(order.createdAt).toLocaleDateString()}</td>
                                 </tr>
                             ))}
                         </tbody>
