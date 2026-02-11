@@ -103,14 +103,29 @@ export default function AdminOrdersPage() {
                         {/* Order Header */}
                         <div className="p-6 flex items-center justify-between cursor-pointer hover:bg-[var(--color-bg-card)] transition" onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}>
                             <div className="flex items-center gap-6">
+                                {/* Product Images Preview */}
+                                <div className="flex -space-x-2">
+                                    {order.items.slice(0, 3).map((item, idx) => (
+                                        <img key={idx} src={item.product.images[0]} alt="" className="w-12 h-12 rounded-lg border-2 border-white object-cover shadow-sm" />
+                                    ))}
+                                    {order.items.length > 3 && (
+                                        <div className="w-12 h-12 rounded-lg border-2 border-white bg-[var(--color-primary)] text-white flex items-center justify-center text-xs font-bold shadow-sm">+{order.items.length - 3}</div>
+                                    )}
+                                </div>
+                                <div className="h-12 w-px bg-[var(--color-border)]" />
                                 <div>
                                     <p className="font-mono font-bold text-[var(--color-primary)]">{order.orderNumber}</p>
-                                    <p className="text-sm text-[var(--color-text-muted)] mt-1">{new Date(order.createdAt).toLocaleDateString()}</p>
+                                    <p className="text-sm text-[var(--color-text-muted)] mt-1">{new Date(order.createdAt).toLocaleDateString()} • {new Date(order.createdAt).toLocaleTimeString()}</p>
                                 </div>
                                 <div className="h-12 w-px bg-[var(--color-border)]" />
                                 <div>
                                     <p className="text-sm text-[var(--color-text-muted)]">Customer</p>
                                     <p className="font-bold text-[var(--color-text-primary)]">{order.shippingAddress.fullName}</p>
+                                </div>
+                                <div className="h-12 w-px bg-[var(--color-border)]" />
+                                <div>
+                                    <p className="text-sm text-[var(--color-text-muted)]">Items</p>
+                                    <p className="font-bold text-[var(--color-text-primary)]">{order.items.length} product{order.items.length > 1 ? 's' : ''}</p>
                                 </div>
                                 <div className="h-12 w-px bg-[var(--color-border)]" />
                                 <div>
@@ -145,58 +160,124 @@ export default function AdminOrdersPage() {
                         {/* Expanded Order Details */}
                         {expandedOrder === order._id && (
                             <div className="border-t border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 space-y-6">
-                                {/* Customer & Shipping Info */}
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
-                                        <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-3">Customer Info</h3>
-                                        <p className="font-bold text-[var(--color-text-primary)]">{order.user.name}</p>
-                                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{order.user.email}</p>
-                                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{order.shippingAddress.phone}</p>
+                                {/* Order Summary */}
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Order Date</p>
+                                        <p className="font-bold text-[var(--color-text-primary)]">{new Date(order.createdAt).toLocaleDateString()}</p>
+                                        <p className="text-sm text-[var(--color-text-muted)]">{new Date(order.createdAt).toLocaleTimeString()}</p>
                                     </div>
-                                    <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
-                                        <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-3">Shipping Address</h3>
-                                        <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.address}</p>
-                                        <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postalCode}</p>
-                                        <p className="text-sm font-bold text-[var(--color-text-primary)] mt-1">{order.shippingAddress.country}</p>
+                                    <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Payment Method</p>
+                                        <p className="font-bold text-[var(--color-text-primary)]">{order.paymentMethod}</p>
+                                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-bold mt-1 ${
+                                            order.paymentStatus === 'paid' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
+                                        }`}>{order.paymentStatus}</span>
+                                    </div>
+                                    <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Total Items</p>
+                                        <p className="font-bold text-[var(--color-text-primary)] text-2xl">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
+                                        <p className="text-sm text-[var(--color-text-muted)]">{order.items.length} product{order.items.length > 1 ? 's' : ''}</p>
+                                    </div>
+                                    <div className="bg-white rounded-xl p-4 border border-[var(--color-border)]">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Order Total</p>
+                                        <p className="font-bold text-[var(--color-accent)] text-2xl">৳{order.total.toLocaleString()}</p>
                                     </div>
                                 </div>
 
-                                {/* Payment Info */}
-                                <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
-                                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-3">Payment Details</h3>
-                                    <div className="flex gap-6">
-                                        <div>
-                                            <p className="text-sm text-[var(--color-text-muted)]">Method</p>
-                                            <p className="font-bold text-[var(--color-text-primary)]">{order.paymentMethod}</p>
+                                {/* Customer & Shipping Info */}
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 bg-[var(--color-accent)]/10 rounded-lg flex items-center justify-center text-xl">👤</div>
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Customer Information</h3>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-[var(--color-text-muted)]">Status</p>
-                                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
-                                                order.paymentStatus === 'paid' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
-                                            }`}>{order.paymentStatus}</span>
+                                        <div className="space-y-2">
+                                            <div>
+                                                <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Name</p>
+                                                <p className="font-bold text-[var(--color-text-primary)]">{order.user.name}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Email</p>
+                                                <p className="text-sm text-[var(--color-text-primary)]">{order.user.email}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Phone</p>
+                                                <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.phone}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 bg-[var(--color-accent)]/10 rounded-lg flex items-center justify-center text-xl">📍</div>
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Shipping Address</h3>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="font-bold text-[var(--color-text-primary)]">{order.shippingAddress.fullName}</p>
+                                            <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.address}</p>
+                                            <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.city}, {order.shippingAddress.state}</p>
+                                            <p className="text-sm text-[var(--color-text-primary)]">{order.shippingAddress.postalCode}</p>
+                                            <p className="text-sm font-bold text-[var(--color-text-primary)] mt-2">{order.shippingAddress.country}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Order Items */}
                                 <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
-                                    <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-4">Order Items</h3>
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 bg-[var(--color-accent)]/10 rounded-lg flex items-center justify-center text-xl">📦</div>
+                                        <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Order Items</h3>
+                                    </div>
                                     <div className="space-y-3">
                                         {order.items.map((item, idx) => (
-                                            <div key={idx} className="flex items-center gap-4 p-3 bg-[var(--color-bg-card)] rounded-lg">
-                                                <img src={item.product.images[0]} alt={item.product.name} className="w-16 h-16 object-cover rounded-lg" />
+                                            <div key={idx} className="flex items-center gap-4 p-4 bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] hover:shadow-sm transition">
+                                                <img src={item.product.images[0]} alt={item.product.name} className="w-20 h-20 object-cover rounded-lg shadow-sm" />
                                                 <div className="flex-grow">
                                                     <p className="font-bold text-[var(--color-text-primary)]">{item.product.name}</p>
-                                                    <p className="text-sm text-[var(--color-text-muted)]">Qty: {item.quantity} × ৳{item.price.toLocaleString()}</p>
+                                                    <div className="flex items-center gap-4 mt-2">
+                                                        <div>
+                                                            <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Quantity</p>
+                                                            <p className="text-sm font-bold text-[var(--color-text-primary)]">{item.quantity}</p>
+                                                        </div>
+                                                        <div className="h-8 w-px bg-[var(--color-border)]" />
+                                                        <div>
+                                                            <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Unit Price</p>
+                                                            <p className="text-sm font-bold text-[var(--color-text-primary)]">৳{item.price.toLocaleString()}</p>
+                                                        </div>
+                                                        <div className="h-8 w-px bg-[var(--color-border)]" />
+                                                        <div>
+                                                            <p className="text-xs text-[var(--color-text-muted)] uppercase font-bold">Subtotal</p>
+                                                            <p className="text-sm font-bold text-[var(--color-accent)]">৳{(item.price * item.quantity).toLocaleString()}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <p className="font-bold text-[var(--color-accent)]">৳{(item.price * item.quantity).toLocaleString()}</p>
                                             </div>
                                         ))}
                                     </div>
                                     <div className="mt-4 pt-4 border-t border-[var(--color-border)] flex justify-between items-center">
-                                        <span className="font-bold text-[var(--color-text-primary)]">Total Amount</span>
-                                        <span className="text-2xl font-bold text-[var(--color-accent)]">৳{order.total.toLocaleString()}</span>
+                                        <span className="font-bold text-[var(--color-text-primary)] text-lg">Total Amount</span>
+                                        <span className="text-3xl font-bold text-[var(--color-accent)]">৳{order.total.toLocaleString()}</span>
                                     </div>
+                                </div>
+
+                                {/* Status Update */}
+                                <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 bg-[var(--color-accent)]/10 rounded-lg flex items-center justify-center text-xl">🔄</div>
+                                        <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Update Order Status</h3>
+                                    </div>
+                                    <select
+                                        value={order.orderStatus}
+                                        onChange={(e) => { e.stopPropagation(); updateStatus(order._id, e.target.value); }}
+                                        className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] font-bold outline-none focus:border-[var(--color-accent)] transition"
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
                                 </div>
                             </div>
                         )}
