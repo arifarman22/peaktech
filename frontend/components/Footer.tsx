@@ -4,18 +4,18 @@ import Link from 'next/link';
 
 export default function Footer() {
     return (
-        <footer className="bg-black text-white pt-20 pb-10 border-t border-gray-800">
+        <footer className="bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-primary)] to-[var(--color-accent)] text-white pt-20 pb-10 mt-20">
             <div className="max-w-7xl mx-auto px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     {/* Brand Section */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <div className="w-8 h-8 bg-white text-black flex items-center justify-center font-light text-xl">
+                            <div className="w-12 h-12 bg-white text-[var(--color-primary)] rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg group-hover:scale-110 transition-transform">
                                 P
                             </div>
-                            <span className="text-xl font-light tracking-tight">PeakTech</span>
+                            <span className="text-2xl font-bold">PeakTech</span>
                         </Link>
-                        <p className="text-gray-400 leading-relaxed mb-8 max-w-xs">
+                        <p className="text-white/80 leading-relaxed mb-8 max-w-xs">
                             Quality electronics and industrial parts for professionals and enthusiasts.
                         </p>
                         <div className="flex gap-3">
@@ -23,10 +23,10 @@ export default function Footer() {
                                 <Link
                                     key={social}
                                     href="#"
-                                    className="w-9 h-9 border border-gray-700 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all"
+                                    className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-white hover:text-[var(--color-primary)] transition-all"
                                 >
                                     <span className="sr-only">{social}</span>
-                                    <div className="w-4 h-4 bg-current opacity-20" />
+                                    <div className="w-4 h-4 bg-current opacity-60" />
                                 </Link>
                             ))}
                         </div>
@@ -34,7 +34,7 @@ export default function Footer() {
 
                     {/* Links - Shop */}
                     <div>
-                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-6">Collections</h4>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Collections</h4>
                         <ul className="space-y-3">
                             <li><FooterLink href="/shop?category=electronics">Electronics</FooterLink></li>
                             <li><FooterLink href="/shop?category=machinery">Machinery</FooterLink></li>
@@ -45,7 +45,7 @@ export default function Footer() {
 
                     {/* Links - Support */}
                     <div>
-                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-6">Company</h4>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Company</h4>
                         <ul className="space-y-3">
                             <li><FooterLink href="#">Shipping Info</FooterLink></li>
                             <li><FooterLink href="#">Returns & Exchanges</FooterLink></li>
@@ -56,15 +56,15 @@ export default function Footer() {
 
                     {/* Newsletter */}
                     <div>
-                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-6">Newsletter</h4>
-                        <p className="text-gray-400 text-sm mb-6">Sign up for updates and offers.</p>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Newsletter</h4>
+                        <p className="text-white/80 text-sm mb-6">Get updates and exclusive offers.</p>
                         <form className="relative group">
                             <input
                                 type="email"
                                 placeholder="your@email.com"
-                                className="w-full bg-transparent border border-gray-700 py-3 px-4 text-sm text-white outline-none focus:border-white transition-all placeholder:text-gray-600"
+                                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl py-3 px-4 text-sm text-white outline-none focus:border-white transition-all placeholder:text-white/50"
                             />
-                            <button className="absolute right-2 top-2 bottom-2 px-4 bg-white text-black text-xs uppercase tracking-wider hover:bg-gray-200 transition-all">
+                            <button className="absolute right-2 top-2 bottom-2 px-4 bg-white text-[var(--color-primary)] rounded-lg text-xs font-semibold uppercase tracking-wider hover:bg-white/90 transition-all">
                                 Join
                             </button>
                         </form>
@@ -72,13 +72,13 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                <div className="pt-10 border-t border-white/20 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <p className="text-sm text-white/60">
                         © 2026 PeakTech. All rights reserved.
                     </p>
                     <div className="flex gap-8">
-                        <Link href="#" className="text-xs uppercase tracking-wider text-gray-500 hover:text-white transition-colors">Privacy</Link>
-                        <Link href="#" className="text-xs uppercase tracking-wider text-gray-500 hover:text-white transition-colors">Terms</Link>
+                        <Link href="#" className="text-sm text-white/60 hover:text-white transition-colors">Privacy</Link>
+                        <Link href="#" className="text-sm text-white/60 hover:text-white transition-colors">Terms</Link>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@ export default function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
     return (
-        <Link href={href} className="text-sm text-gray-400 hover:text-white transition-all flex items-center gap-2 group">
+        <Link href={href} className="text-sm text-white/70 hover:text-white transition-all flex items-center gap-2 group">
             {children}
         </Link>
     );
