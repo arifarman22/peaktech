@@ -38,24 +38,21 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+        <div className="min-h-screen bg-[var(--color-bg-main)]">
             <Navbar />
 
-            <div className="flex-grow flex items-center justify-center p-6 pt-32 pb-20">
-                <div className="bg-white border border-[var(--color-border)] p-10 md:p-16 w-full max-w-xl">
-                    <div className="text-center mb-12">
-                        <div className="w-16 h-16 bg-black flex items-center justify-center mx-auto mb-8">
-                            <span className="text-white font-light text-3xl">P</span>
-                        </div>
-                        <h1 className="text-3xl font-light text-black mb-2">
+            <div className="flex items-center justify-center p-6 pt-32 pb-20">
+                <div className="bg-white border border-[var(--color-border)] rounded-lg p-8 md:p-10 w-full max-w-md shadow-sm">
+                    <div className="text-center mb-8">
+                        <h1 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">
                             Create Account
                         </h1>
-                        <p className="text-gray-600 text-sm">Join PeakTech today</p>
+                        <p className="text-[var(--color-text-muted)] text-sm">Join PeakTech today</p>
                     </div>
 
-                    <form onSubmit={handleRegister} className="space-y-6">
+                    <form onSubmit={handleRegister} className="space-y-5">
                         <div className="space-y-2">
-                            <label htmlFor="name" className="text-xs uppercase text-gray-600 tracking-wider">
+                            <label htmlFor="name" className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Full Name
                             </label>
                             <input
@@ -63,14 +60,14 @@ export default function RegisterPage() {
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full bg-white border border-gray-300 px-4 py-3 text-sm text-black focus:border-black transition-all outline-none placeholder-gray-400"
+                                className="w-full bg-white border border-[var(--color-border)] px-4 py-2.5 rounded-md text-sm text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all outline-none placeholder-[var(--color-text-muted)]"
                                 placeholder="Your Full Name"
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="email" className="text-xs uppercase text-gray-600 tracking-wider">
+                            <label htmlFor="email" className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Email Address
                             </label>
                             <input
@@ -78,14 +75,14 @@ export default function RegisterPage() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-white border border-gray-300 px-4 py-3 text-sm text-black focus:border-black transition-all outline-none placeholder-gray-400"
+                                className="w-full bg-white border border-[var(--color-border)] px-4 py-2.5 rounded-md text-sm text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all outline-none placeholder-[var(--color-text-muted)]"
                                 placeholder="your@email.com"
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="password" className="text-xs uppercase text-gray-600 tracking-wider">
+                            <label htmlFor="password" className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Password
                             </label>
                             <input
@@ -93,7 +90,7 @@ export default function RegisterPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-white border border-gray-300 px-4 py-3 text-sm text-black focus:border-black transition-all outline-none placeholder-gray-400"
+                                className="w-full bg-white border border-[var(--color-border)] px-4 py-2.5 rounded-md text-sm text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all outline-none placeholder-[var(--color-text-muted)]"
                                 placeholder="••••••••"
                                 required
                                 minLength={6}
@@ -103,23 +100,23 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-black text-white py-3 text-sm uppercase tracking-wider hover:bg-[#333333] transition-all disabled:opacity-40"
+                            className="w-full bg-[var(--color-primary)] text-white py-3 rounded-md font-medium text-sm hover:bg-[var(--color-primary-hover)] transition-all shadow-sm disabled:opacity-50"
                         >
                             {loading ? 'Creating account...' : 'Create Account'}
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center text-sm">
-                        <p className="text-gray-600">
+                    <div className="mt-6 text-center text-sm">
+                        <p className="text-[var(--color-text-muted)]">
                             Already have an account?{' '}
-                            <Link href="/login" className="text-black hover:underline">
+                            <Link href="/login" className="text-[var(--color-primary)] hover:underline font-medium">
                                 Sign In
                             </Link>
                         </p>
                     </div>
 
-                    <div className="mt-8 border-t border-gray-200 pt-8 text-center">
-                        <Link href="/" className="text-gray-600 hover:text-black text-sm transition-colors">
+                    <div className="mt-6 pt-6 border-t border-[var(--color-border)] text-center">
+                        <Link href="/" className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] text-sm transition-colors">
                             ← Back to Home
                         </Link>
                     </div>

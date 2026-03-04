@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login, googleLogin } = useAuth();
+    const { login } = useAuth();
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -29,24 +29,21 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-bg-card)] flex flex-col">
+        <div className="min-h-screen bg-[var(--color-bg-main)]">
             <Navbar />
 
-            <div className="flex-grow flex items-center justify-center p-6 pt-32">
-                <div className="bg-white border border-[var(--color-border)] rounded-[40px] p-10 md:p-16 w-full max-w-xl shadow-xl">
-                    <div className="text-center mb-12">
-                        <div className="w-20 h-20 bg-[var(--color-primary)] rounded-[28px] flex items-center justify-center mx-auto mb-8 shadow-2xl">
-                            <span className="text-white font-black text-4xl">P</span>
-                        </div>
-                        <h1 className="text-4xl md:text-5xl font-black text-[var(--color-primary)] mb-4 tracking-tighter">
-                            WELCOME BACK
+            <div className="flex items-center justify-center p-6 pt-32 pb-20">
+                <div className="bg-white border border-[var(--color-border)] rounded-lg p-8 md:p-10 w-full max-w-md shadow-sm">
+                    <div className="text-center mb-8">
+                        <h1 className="text-2xl font-semibold text-[var(--color-text-primary)] mb-2">
+                            Sign In
                         </h1>
-                        <p className="text-[var(--color-text-muted)] font-bold uppercase text-[10px] tracking-[0.3em]">Sign in to your account</p>
+                        <p className="text-[var(--color-text-muted)] text-sm">Welcome back to PeakTech</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
-                        <div className="space-y-3">
-                            <label htmlFor="email" className="text-[10px] uppercase font-black text-[var(--color-primary)] ml-1 tracking-[0.2em]">
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-2">
+                            <label htmlFor="email" className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Email Address
                             </label>
                             <input
@@ -54,14 +51,14 @@ export default function LoginPage() {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-[var(--color-bg-card)] border-2 border-[var(--color-border)] px-6 py-5 rounded-[20px] font-bold text-sm text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:bg-white transition-all outline-none placeholder-[var(--color-text-muted)]"
+                                className="w-full bg-white border border-[var(--color-border)] px-4 py-2.5 rounded-md text-sm text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all outline-none placeholder-[var(--color-text-muted)]"
                                 placeholder="your@email.com"
                                 required
                             />
                         </div>
 
-                        <div className="space-y-3">
-                            <label htmlFor="password" className="text-[10px] uppercase font-black text-[var(--color-primary)] ml-1 tracking-[0.2em]">
+                        <div className="space-y-2">
+                            <label htmlFor="password" className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Password
                             </label>
                             <input
@@ -69,7 +66,7 @@ export default function LoginPage() {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-[var(--color-bg-card)] border-2 border-[var(--color-border)] px-6 py-5 rounded-[20px] font-bold text-sm text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:bg-white transition-all outline-none placeholder-[var(--color-text-muted)]"
+                                className="w-full bg-white border border-[var(--color-border)] px-4 py-2.5 rounded-md text-sm text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all outline-none placeholder-[var(--color-text-muted)]"
                                 placeholder="••••••••"
                                 required
                             />
@@ -78,39 +75,23 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[var(--color-accent)] text-white py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] hover:bg-[var(--color-accent-hover)] transition-all shadow-xl disabled:opacity-50 active:scale-[0.98]"
+                            className="w-full bg-[var(--color-primary)] text-white py-3 rounded-md font-medium text-sm hover:bg-[var(--color-primary-hover)] transition-all shadow-sm disabled:opacity-50"
                         >
                             {loading ? 'Signing in...' : 'Sign In'}
                         </button>
-
-                        <div className="relative py-4">
-                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[var(--color-border)]"></div></div>
-                            <div className="relative flex justify-center text-[9px] font-black uppercase tracking-widest">
-                                <span className="px-4 bg-white text-[var(--color-text-muted)]">OR LOGIN WITH</span>
-                            </div>
-                        </div>
-
-                        <button
-                            type="button"
-                            disabled
-                            className="w-full bg-[var(--color-bg-card)] border-2 border-[var(--color-border)] text-[var(--color-text-muted)] py-6 rounded-[24px] font-black uppercase text-xs tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-[var(--color-border)] transition-all active:scale-[0.98] opacity-50 cursor-not-allowed"
-                        >
-                            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-                            Google Sign-in (Coming Soon)
-                        </button>
                     </form>
 
-                    <div className="mt-12 text-center text-[10px] font-black uppercase tracking-widest">
+                    <div className="mt-6 text-center text-sm">
                         <p className="text-[var(--color-text-muted)]">
                             Don't have an account?{' '}
-                            <Link href="/register" className="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] transition-colors">
+                            <Link href="/register" className="text-[var(--color-primary)] hover:underline font-medium">
                                 Create Account
                             </Link>
                         </p>
                     </div>
 
-                    <div className="mt-8 border-t border-[var(--color-border)] pt-8 text-center">
-                        <Link href="/" className="text-[var(--color-text-muted)] hover:text-[var(--color-accent)] text-[10px] font-black uppercase tracking-[0.2em] transition-colors">
+                    <div className="mt-6 pt-6 border-t border-[var(--color-border)] text-center">
+                        <Link href="/" className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] text-sm transition-colors">
                             ← Back to Home
                         </Link>
                     </div>
