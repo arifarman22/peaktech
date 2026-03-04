@@ -10,10 +10,7 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <div className="w-12 h-12 bg-white text-[var(--color-primary)] rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg group-hover:scale-110 transition-transform">
-                                P
-                            </div>
-                            <span className="text-2xl font-bold">PeakTech</span>
+                            <img src="/logo.png" alt="PeakTech" className="h-12 w-auto brightness-0 invert" />
                         </Link>
                         <p className="text-white/80 leading-relaxed mb-8 max-w-xs">
                             Quality electronics and industrial parts for professionals and enthusiasts.

@@ -67,10 +67,7 @@ function NavbarContent() {
                     {/* Left: Logo & Links */}
                     <div className="flex items-center gap-10">
                         <Link href="/" className="flex items-center gap-2.5 group">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg group-hover:scale-110 transition-transform">
-                                P
-                            </div>
-                            <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent hidden sm:block">PeakTech</span>
+                            <img src="/logo.png" alt="PeakTech" className="h-10 w-auto" />
                         </Link>
 
                         <div className="hidden lg:flex items-center gap-8">
@@ -231,10 +228,7 @@ function NavbarFallback() {
         <nav className="fixed top-10 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-6 md:px-10 py-4 bg-white/95 backdrop-blur-xl border-b border-[var(--color-border)]">
                 <Link href="/" className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
-                        P
-                    </div>
-                    <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent hidden sm:block">PeakTech</span>
+                    <img src="/logo.png" alt="PeakTech" className="h-10 w-auto" />
                 </Link>
             </div>
         </nav>
