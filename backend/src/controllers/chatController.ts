@@ -4,7 +4,7 @@ import Product from '../models/Product';
 import Category from '../models/Category';
 import { successResponse, errorResponse } from '../utils/api-response';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
 
 const SYSTEM_PROMPT = `You are a friendly and knowledgeable shopkeeper assistant for PeakTech, an e-commerce store specializing in electronics, machinery, and industrial parts.
 
@@ -26,6 +26,10 @@ Guidelines:
 
 export const chatWithAI = async (req: Request, res: Response) => {
     try {
+        if (!groq) {
+            return res.status(503).json(errorResponse('AI service is currently unavailable'));
+        }
+
         const { message, conversationHistory = [] } = req.body;
 
         if (!message) {
