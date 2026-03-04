@@ -27,28 +27,24 @@ export const register = async (req: Request, res: Response) => {
         }
 
         const hashedPassword = await hashPassword(password);
+        const otp = generateOTP();
+        const otpExpiry = generateOTPExpiry();
 
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
-            emailVerified: true,
+            emailVerified: false,
+            otp,
+            otpExpiry,
         });
 
-        const tokenPayload = { userId: user._id.toString(), email: user.email, role: user.role };
-        const accessToken = generateAccessToken(tokenPayload);
-        const refreshToken = generateRefreshToken(tokenPayload);
+        await sendOTPEmail(email, otp, name);
 
         return res.status(201).json(successResponse({
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-            },
-            accessToken,
-            refreshToken
-        }, 'User registered successfully'));
+            email: user.email,
+            message: 'OTP sent to your email'
+        }, 'Registration successful. Please verify your email'));
     } catch (error) {
         console.error('Register error:', error);
         return res.status(500).json(errorResponse('Internal server error'));
@@ -64,7 +60,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
 
         const { email, otp } = validated.data;
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select('+otp +otpExpiry');
         if (!user) return res.status(404).json(errorResponse('User not found'));
 
         if (user.otp !== otp || (user.otpExpiry && user.otpExpiry < new Date())) {
@@ -181,6 +177,31 @@ export const login = async (req: Request, res: Response) => {
         }, 'Login successful'));
     } catch (error) {
         console.error('Login error:', error);
+        return res.status(500).json(errorResponse('Internal server error'));
+    }
+};
+
+export const resendOTP = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json(errorResponse('Email is required'));
+
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json(errorResponse('User not found'));
+        if (user.emailVerified) return res.status(400).json(errorResponse('Email already verified'));
+
+        const otp = generateOTP();
+        const otpExpiry = generateOTPExpiry();
+
+        user.otp = otp;
+        user.otpExpiry = otpExpiry;
+        await user.save();
+
+        await sendOTPEmail(email, otp, user.name);
+
+        return res.json(successResponse({ email }, 'OTP sent successfully'));
+    } catch (error) {
+        console.error('Resend OTP error:', error);
         return res.status(500).json(errorResponse('Internal server error'));
     }
 };

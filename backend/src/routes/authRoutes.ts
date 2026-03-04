@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, verifyOTP, getMe, updateProfile } from '../controllers/authController';
+import { register, login, verifyOTP, resendOTP, getMe, updateProfile } from '../controllers/authController';
 import { googleAuth } from '../controllers/googleAuthController';
 import { authMiddleware } from '../utils/middleware';
 
@@ -9,6 +9,7 @@ router.post('/register', register);
 router.post('/login', login);
 router.post('/google', googleAuth);
 router.post('/verify-otp', verifyOTP);
+router.post('/resend-otp', resendOTP);
 router.get('/me', authMiddleware, getMe);
 router.put('/profile', authMiddleware, updateProfile);
 

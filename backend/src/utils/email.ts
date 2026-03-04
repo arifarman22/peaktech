@@ -46,7 +46,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<boolean> {
   }
 }
 
-export async function sendOTPEmail(email: string, otp: string): Promise<boolean> {
+export async function sendOTPEmail(email: string, otp: string, name?: string): Promise<boolean> {
   const html = `
     <!DOCTYPE html>
     <html>
@@ -54,9 +54,9 @@ export async function sendOTPEmail(email: string, otp: string): Promise<boolean>
       <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
-        .otp { font-size: 32px; font-weight: bold; color: #667eea; text-align: center; padding: 20px; background: white; border-radius: 8px; margin: 20px 0; letter-spacing: 8px; }
+        .header { background: #000000; color: white; padding: 30px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .otp { font-size: 32px; font-weight: bold; color: #000000; text-align: center; padding: 20px; background: white; border: 2px solid #000000; margin: 20px 0; letter-spacing: 8px; }
         .footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; }
       </style>
     </head>
@@ -67,7 +67,7 @@ export async function sendOTPEmail(email: string, otp: string): Promise<boolean>
           <p style="margin: 10px 0 0 0;">Verify Your Email</p>
         </div>
         <div class="content">
-          <p>Hello,</p>
+          <p>Hello${name ? ' ' + name : ''},</p>
           <p>Thank you for registering with PeakTech. Please use the following OTP to verify your email address:</p>
           <div class="otp">${otp}</div>
           <p style="text-align: center; color: #666;">This OTP will expire in 10 minutes.</p>
