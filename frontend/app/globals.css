@@ -1,22 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  /* Theme Tokens - Deep Blue + Cyan */
-  --color-primary: #0A2540;
-  --color-accent: #2EC4B6;
+  /* Classic Minimalist Theme - Grayscale */
+  --color-primary: #000000;
+  --color-accent: #333333;
   --color-bg-main: #FFFFFF;
-  --color-bg-card: #F8FAFC;
-  --color-text-primary: #1F2933;
-  --color-text-muted: #6B7280;
-  --color-border: #E5E7EB;
+  --color-bg-card: #FAFAFA;
+  --color-text-primary: #000000;
+  --color-text-muted: #666666;
+  --color-border: #E0E0E0;
   
   /* Derived tokens */
-  --color-accent-hover: #26A69A;
-  --color-destructive: #EF4444;
-  --radius: 0.5rem;
+  --color-accent-hover: #000000;
+  --color-destructive: #DC2626;
+  --radius: 0.25rem;
 }
-
-
 
 @theme inline {
   --color-primary: var(--color-primary);
@@ -32,35 +30,34 @@
 body {
   background: var(--color-bg-main);
   color: var(--color-text-primary);
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: inherit;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.98);
   border: 1px solid var(--color-border);
 }
 
 .premium-shadow {
-  box-shadow: 0 4px 6px -1px rgba(10, 37, 64, 0.1), 0 2px 4px -1px rgba(10, 37, 64, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -68,10 +65,10 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 4px;
+  background: var(--color-border);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
+  background: var(--color-text-muted);
 }
