@@ -53,24 +53,23 @@ function NavbarContent() {
     return (
         <>
             {/* Announcement Bar */}
-            <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white py-2.5 text-xs text-center fixed top-0 left-0 right-0 z-[60] font-medium">
-                ✨ Free Shipping on Orders ৳5,000+ • New Year Sale - Up to 50% Off!
+            <div className="bg-[var(--color-primary)] text-white py-2 text-xs text-center fixed top-0 left-0 right-0 z-[60]">
+                Free Shipping on Orders ৳5,000+ • New Year Sale - Up to 50% Off!
             </div>
 
             {/* Main Navbar */}
             <nav
-                className={`fixed top-10 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'top-0' : ''
-                    }`}
+                className={`fixed top-10 left-0 right-0 z-50 transition-all duration-200 ${scrolled ? 'top-0' : ''}`}
             >
-                <div className={`max-w-7xl mx-auto flex items-center justify-between gap-4 px-6 md:px-10 py-4 transition-all duration-300 bg-white/95 backdrop-blur-xl border-b border-[var(--color-border)] ${scrolled ? 'shadow-lg' : ''}`}>
+                <div className={`max-w-7xl mx-auto flex items-center justify-between gap-4 px-6 md:px-10 py-3 transition-all duration-200 bg-white border-b border-[var(--color-border)] ${scrolled ? 'shadow-md' : ''}`}>
 
                     {/* Left: Logo & Links */}
                     <div className="flex items-center gap-10">
-                        <Link href="/" className="flex items-center gap-2.5 group">
-                            <img src="/logo.png?v=1" alt="PeakTech" className="h-10 w-auto" />
+                        <Link href="/" className="flex items-center gap-2.5">
+                            <img src="/logo.png?v=1" alt="PeakTech" className="h-9 w-auto" />
                         </Link>
 
-                        <div className="hidden lg:flex items-center gap-8">
+                        <div className="hidden lg:flex items-center gap-6">
                             <NavLink href="/shop">Shop</NavLink>
                             <NavLink href="/shop?category=electronics">Electronics</NavLink>
                             <NavLink href="/shop?category=machinery">Machinery</NavLink>
@@ -79,52 +78,52 @@ function NavbarContent() {
 
                     {/* Center: Search */}
                     <div className="hidden md:flex flex-grow max-w-md">
-                        <form onSubmit={handleSearch} className="relative w-full group">
+                        <form onSubmit={handleSearch} className="relative w-full">
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-[var(--color-bg-main)] border border-[var(--color-border)] rounded-xl py-2.5 px-4 pl-11 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition-all text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)]"
+                                className="w-full bg-white border border-[var(--color-border)] rounded-md py-2 px-4 pl-10 focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition-all text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)]"
                             />
-                            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--color-text-muted)] group-focus-within:text-[var(--color-primary)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </form>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex items-center gap-3 md:gap-5">
-                        <div className="hidden sm:flex items-center gap-4">
+                    <div className="flex items-center gap-3 md:gap-4">
+                        <div className="hidden sm:flex items-center gap-3">
                             {user ? (
-                                <div className="flex items-center gap-4">
-                                    <Link href={user.role === 'admin' ? '/admin' : '/profile'} className="flex items-center gap-2 group">
-                                        <div className="w-9 h-9 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] rounded-full flex items-center justify-center text-white font-semibold shadow-md group-hover:scale-110 transition-transform">
+                                <div className="flex items-center gap-3">
+                                    <Link href={user.role === 'admin' ? '/admin' : '/profile'} className="flex items-center gap-2">
+                                        <div className="w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
                                             {user.name.charAt(0).toUpperCase()}
                                         </div>
                                     </Link>
-                                    <button onClick={() => logout()} className="text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Logout</button>
+                                    <button onClick={() => logout()} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Logout</button>
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-2">
-                                    <Link href="/login" className="text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] px-3 py-2 transition-colors">Sign In</Link>
-                                    <Link href="/register" className="px-4 py-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:scale-105 transition-all">Sign Up</Link>
+                                    <Link href="/login" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] px-3 py-1.5 transition-colors">Sign In</Link>
+                                    <Link href="/register" className="px-4 py-1.5 bg-[var(--color-primary)] text-white text-sm rounded-md hover:bg-[var(--color-primary-hover)] transition-all">Sign Up</Link>
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex items-center gap-2 border-l border-[var(--color-border)] pl-4 h-8 ml-2">
-                            <Link href="/wishlist" className="relative p-2 text-[var(--color-text-primary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-main)] rounded-lg transition-all">
+                        <div className="flex items-center gap-2 border-l border-[var(--color-border)] pl-3 ml-2">
+                            <Link href="/wishlist" className="relative p-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] transition-colors">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                             </Link>
-                            <Link href="/cart" className="relative p-2 text-[var(--color-text-primary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-bg-main)] rounded-lg transition-all group">
+                            <Link href="/cart" className="relative p-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] transition-colors">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md">
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-primary)] text-white text-xs font-medium rounded-full flex items-center justify-center">
                                         {cartCount}
                                     </span>
                                 )}
@@ -195,10 +194,9 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
     return (
         <Link
             href={href}
-            className="text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-all relative group py-1"
+            className="text-sm text-[var(--color-text-primary)] hover:text-[var(--color-primary)] transition-colors font-medium"
         >
             {children}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-all duration-300 group-hover:w-full rounded-full" />
         </Link>
     );
 }
