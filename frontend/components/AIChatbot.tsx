@@ -34,6 +34,7 @@ export default function AIChatbot() {
         setLoading(true);
 
         try {
+            console.log('Sending message to AI...');
             const data = await apiFetch('/ai/chat', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -42,13 +43,22 @@ export default function AIChatbot() {
                 })
             });
 
+            console.log('AI Response:', data);
+
             if (data.success) {
                 setMessages(data.data.conversationHistory);
+            } else {
+                console.error('AI Error:', data.error);
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: `Sorry, I encountered an error: ${data.error || 'Unknown error'}`
+                }]);
             }
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Chat error:', error);
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: 'Sorry, I\'m having trouble connecting. Please try again.'
+                content: 'Sorry, I\'m having trouble connecting. Please check if the backend server is running and the Groq API key is configured correctly.'
             }]);
         } finally {
             setLoading(false);

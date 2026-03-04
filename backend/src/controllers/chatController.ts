@@ -26,7 +26,12 @@ Guidelines:
 
 export const chatWithAI = async (req: Request, res: Response) => {
     try {
+        console.log('Chat request received');
+        console.log('Groq initialized:', !!groq);
+        console.log('API Key exists:', !!process.env.GROQ_API_KEY);
+
         if (!groq) {
+            console.error('Groq not initialized - API key missing');
             return res.status(503).json(errorResponse('AI service is currently unavailable'));
         }
 
@@ -35,6 +40,8 @@ export const chatWithAI = async (req: Request, res: Response) => {
         if (!message) {
             return res.status(400).json(errorResponse('Message is required'));
         }
+
+        console.log('User message:', message);
 
         // Get product context for better responses
         const products = await Product.find().limit(20).populate('category');
@@ -47,10 +54,11 @@ Sample Products: ${products.slice(0, 10).map(p => `${p.name} (৳${p.price})`).j
 
         const messages: any[] = [
             { role: 'system', content: SYSTEM_PROMPT + '\n\n' + contextInfo },
-            ...conversationHistory,
+            ...conversationHistory.slice(-6),
             { role: 'user', content: message }
         ];
 
+        console.log('Calling Groq API...');
         const completion = await groq.chat.completions.create({
             messages,
             model: 'llama-3.1-8b-instant',
@@ -59,18 +67,24 @@ Sample Products: ${products.slice(0, 10).map(p => `${p.name} (৳${p.price})`).j
         });
 
         const aiResponse = completion.choices[0]?.message?.content || 'Sorry, I could not process that.';
+        console.log('AI Response received:', aiResponse.substring(0, 50));
 
         return res.json(successResponse({
             response: aiResponse,
             conversationHistory: [
-                ...conversationHistory,
+                ...conversationHistory.slice(-6),
                 { role: 'user', content: message },
                 { role: 'assistant', content: aiResponse }
             ]
         }));
     } catch (error: any) {
-        console.error('AI Chat error:', error);
-        return res.status(500).json(errorResponse('Failed to process chat'));
+        console.error('AI Chat error details:', {
+            message: error.message,
+            status: error.status,
+            code: error.code,
+            type: error.type
+        });
+        return res.status(500).json(errorResponse(error.message || 'Failed to process chat'));
     }
 };
 
