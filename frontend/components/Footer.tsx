@@ -10,7 +10,7 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <img src="/logo.png" alt="PeakTech" className="h-12 w-auto brightness-0 invert" />
+                            <img src="/logo.png?v=1" alt="PeakTech" className="h-12 w-auto brightness-0 invert" />
                         </Link>
                         <p className="text-white/80 leading-relaxed mb-8 max-w-xs">
                             Quality electronics and industrial parts for professionals and enthusiasts.

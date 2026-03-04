@@ -67,7 +67,7 @@ function NavbarContent() {
                     {/* Left: Logo & Links */}
                     <div className="flex items-center gap-10">
                         <Link href="/" className="flex items-center gap-2.5 group">
-                            <img src="/logo.png" alt="PeakTech" className="h-10 w-auto" />
+                            <img src="/logo.png?v=1" alt="PeakTech" className="h-10 w-auto" />
                         </Link>
 
                         <div className="hidden lg:flex items-center gap-8">
@@ -228,7 +228,7 @@ function NavbarFallback() {
         <nav className="fixed top-10 left-0 right-0 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-6 md:px-10 py-4 bg-white/95 backdrop-blur-xl border-b border-[var(--color-border)]">
                 <Link href="/" className="flex items-center gap-2.5">
-                    <img src="/logo.png" alt="PeakTech" className="h-10 w-auto" />
+                    <img src="/logo.png?v=1" alt="PeakTech" className="h-10 w-auto" />
                 </Link>
             </div>
         </nav>
