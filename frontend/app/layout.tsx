@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import AIChatbot from "@/components/AIChatbot";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body className={`${nunito.variable} antialiased font-nunito selection:bg-indigo-100 selection:text-indigo-900`}>
         <AuthProvider>
           {children}
+          <AIChatbot />
           <Toaster position="top-right" />
         </AuthProvider>
       </body>

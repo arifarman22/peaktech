@@ -18,6 +18,7 @@ import adminRoutes from './routes/admin/adminRoutes';
 import dashboardRoutes from './routes/dashboardRoutes';
 import wishlistRoutes from './routes/wishlistRoutes';
 import reviewRoutes from './routes/reviewRoutes';
+import chatRoutes from './routes/chatRoutes';
 import { loadEnv } from './config/env';
 
 const app = express();
@@ -112,6 +113,7 @@ app.use('/api/admin', ensureDB, adminRoutes);
 app.use('/api/admin/dashboard', ensureDB, dashboardRoutes);
 app.use('/api/wishlist', ensureDB, wishlistRoutes);
 app.use('/api/reviews', ensureDB, reviewRoutes);
+app.use('/api/ai', ensureDB, chatRoutes);
 
 // Error handler
 app.use((err: any, req: any, res: any, next: any) => {
