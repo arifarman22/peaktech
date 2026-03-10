@@ -63,7 +63,7 @@ export default function ProductCard({ product }: { product: Product }) {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {discount > 0 && (
-                        <div className="absolute top-2 left-2 bg-[var(--color-primary)] text-white text-xs font-semibold px-2 py-1 rounded">
+                        <div className="absolute top-2 left-2 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-xs font-semibold px-2 py-1 rounded">
                             -{discount}%
                         </div>
                     )}
@@ -91,7 +91,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     </div>
                     <button
                         onClick={addToCart}
-                        className="w-full bg-[var(--color-primary)] text-white py-2 rounded-md text-sm font-medium hover:bg-[var(--color-primary-hover)] transition-colors"
+                        className="w-full bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white py-2 rounded-md text-sm font-medium hover:from-[#4338CA] hover:to-[#6D28D9] transition-all"
                     >
                         Add to Cart
                     </button>

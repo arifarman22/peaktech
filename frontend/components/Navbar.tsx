@@ -53,7 +53,7 @@ function NavbarContent() {
     return (
         <>
             {/* Announcement Bar */}
-            <div className="bg-[var(--color-primary)] text-white py-2 text-xs text-center fixed top-0 left-0 right-0 z-[60]">
+            <div className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white py-2 text-xs text-center fixed top-0 left-0 right-0 z-[60]">
                 Free Shipping on Orders ৳5,000+ • New Year Sale - Up to 50% Off!
             </div>
 
@@ -98,7 +98,7 @@ function NavbarContent() {
                             {user ? (
                                 <div className="flex items-center gap-3">
                                     <Link href={user.role === 'admin' ? '/admin' : '/profile'} className="flex items-center gap-2">
-                                        <div className="w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                        <div className="w-8 h-8 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] rounded-full flex items-center justify-center text-white text-sm font-medium">
                                             {user.name.charAt(0).toUpperCase()}
                                         </div>
                                     </Link>
@@ -107,7 +107,7 @@ function NavbarContent() {
                             ) : (
                                 <div className="flex items-center gap-2">
                                     <Link href="/login" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] px-3 py-1.5 transition-colors">Sign In</Link>
-                                    <Link href="/register" className="px-4 py-1.5 bg-[var(--color-primary)] text-white text-sm rounded-md hover:bg-[var(--color-primary-hover)] transition-all">Sign Up</Link>
+                                    <Link href="/register" className="px-4 py-1.5 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-sm rounded-md hover:from-[#4338CA] hover:to-[#6D28D9] transition-all">Sign Up</Link>
                                 </div>
                             )}
                         </div>
@@ -123,7 +123,7 @@ function NavbarContent() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-primary)] text-white text-xs font-medium rounded-full flex items-center justify-center">
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-xs font-medium rounded-full flex items-center justify-center">
                                         {cartCount}
                                     </span>
                                 )}
