@@ -349,14 +349,17 @@ export default function ProfilePage() {
                         onClick={async () => {
                           try {
                             const response = await api.put('/auth/profile', { name: profileData.name, phone: profileData.phone, image: profileData.image });
+                            console.log('Profile update response:', response);
                             if (response.success) {
-                              toast.success('Profile updated');
-                              window.location.reload();
+                              toast.success('Profile updated successfully');
+                              setTimeout(() => window.location.reload(), 1000);
                             } else {
                               toast.error(response.error || 'Update failed');
+                              console.error('Update error:', response);
                             }
-                          } catch (error) {
-                            toast.error('Update failed');
+                          } catch (error: any) {
+                            console.error('Profile update error:', error);
+                            toast.error(error.message || 'Update failed');
                           }
                         }}
                         className="w-full px-10 py-5 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:from-[#4338CA] hover:to-[#6D28D9] transition-all"
