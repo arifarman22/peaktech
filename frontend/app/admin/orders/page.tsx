@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { apiFetch } from '@/lib/utils/api';
 
@@ -33,6 +34,7 @@ interface Order {
 
 export default function AdminOrdersPage() {
     const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
@@ -164,6 +166,12 @@ export default function AdminOrdersPage() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); router.push(`/admin/orders/invoice/${order._id}`); }}
+                                    className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs font-bold hover:from-green-600 hover:to-emerald-600 transition"
+                                >
+                                    📄 Invoice
+                                </button>
                                 <select
                                     value={order.orderStatus}
                                     onChange={(e) => { e.stopPropagation(); updateStatus(order._id, e.target.value); }}
