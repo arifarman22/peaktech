@@ -5,6 +5,8 @@ import { adminMiddleware } from '../../utils/middleware';
 
 const router = Router();
 
+import { getProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../../controllers/productController';
+
 router.use(adminMiddleware);
 
 router.get('/orders', getAdminOrders);
@@ -17,5 +19,12 @@ router.delete('/coupons/:id', deleteCoupon);
 
 // Generic asset uploads (images, videos, files)
 router.post('/uploads', uploadHandler);
+
+// Admin product routes
+router.get('/products', getProducts);
+router.get('/products/:id', getProductById);
+router.post('/products', createProduct);
+router.put('/products/:id', updateProduct);
+router.delete('/products/:id', deleteProduct);
 
 export default router;
