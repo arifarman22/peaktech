@@ -44,7 +44,7 @@ export default function Footer() {
                     <div>
                         <h4 className="text-sm font-semibold mb-4 text-white">Customer Service</h4>
                         <ul className="space-y-2.5">
-                            <li><FooterLink href="#">Contact Us</FooterLink></li>
+                            <li><FooterLink href="/contact">Contact Us</FooterLink></li>
                             <li><FooterLink href="#">Shipping Info</FooterLink></li>
                             <li><FooterLink href="#">Returns</FooterLink></li>
                             <li><FooterLink href="#">FAQ</FooterLink></li>
