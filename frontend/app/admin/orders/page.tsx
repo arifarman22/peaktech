@@ -12,6 +12,7 @@ interface Order {
     orderStatus: string;
     paymentStatus: string;
     paymentMethod: string;
+    trackingNumber?: string;
     createdAt: string;
     user: { name: string; email: string; };
     shippingAddress: {
@@ -36,6 +37,8 @@ export default function AdminOrdersPage() {
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
     const [filter, setFilter] = useState('all');
+    const [trackingModal, setTrackingModal] = useState<{ orderId: string; show: boolean }>({ orderId: '', show: false });
+    const [trackingNumber, setTrackingNumber] = useState('');
 
     useEffect(() => {
         if (!authLoading && user?.role === 'admin') {
@@ -59,6 +62,10 @@ export default function AdminOrdersPage() {
     };
 
     const updateStatus = async (id: string, status: string) => {
+        if (status === 'shipped') {
+            setTrackingModal({ orderId: id, show: true });
+            return;
+        }
         try {
             const data = await apiFetch(`/admin/orders/${id}`, {
                 method: 'PUT',
@@ -70,6 +77,27 @@ export default function AdminOrdersPage() {
             }
         } catch (error) {
             toast.error('Failed to update status');
+        }
+    };
+
+    const submitTracking = async () => {
+        if (!trackingNumber.trim()) {
+            toast.error('Please enter tracking number');
+            return;
+        }
+        try {
+            const data = await apiFetch(`/admin/orders/${trackingModal.orderId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ orderStatus: 'shipped', trackingNumber: trackingNumber.trim() }),
+            });
+            if (data.success) {
+                toast.success('Order shipped with tracking number');
+                setTrackingModal({ orderId: '', show: false });
+                setTrackingNumber('');
+                fetchOrders();
+            }
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to update');
         }
     };
 
@@ -262,6 +290,17 @@ export default function AdminOrdersPage() {
                                     </div>
                                 </div>
 
+                                {/* Tracking Number */}
+                                {order.trackingNumber && (
+                                    <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 bg-[var(--color-accent)]/10 rounded-lg flex items-center justify-center text-xl">🚚</div>
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-primary)]">Tracking Number</h3>
+                                        </div>
+                                        <p className="font-mono text-lg font-bold text-[var(--color-accent)]">{order.trackingNumber}</p>
+                                    </div>
+                                )}
+
                                 {/* Status Update */}
                                 <div className="bg-white rounded-xl p-5 border border-[var(--color-border)]">
                                     <div className="flex items-center gap-3 mb-4">
@@ -290,6 +329,38 @@ export default function AdminOrdersPage() {
             {filteredOrders.length === 0 && (
                 <div className="text-center py-20 bg-white rounded-2xl border border-[var(--color-border)]">
                     <p className="text-[var(--color-text-muted)] font-medium">No orders found</p>
+                </div>
+            )}
+
+            {/* Tracking Number Modal */}
+            {trackingModal.show && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setTrackingModal({ orderId: '', show: false })}>
+                    <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-4">Enter Tracking Number</h2>
+                        <p className="text-sm text-[var(--color-text-muted)] mb-6">Please provide the courier tracking number for this shipment.</p>
+                        <input
+                            type="text"
+                            value={trackingNumber}
+                            onChange={(e) => setTrackingNumber(e.target.value)}
+                            placeholder="e.g. TRK123456789"
+                            className="w-full px-4 py-3 border-2 border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] transition mb-6"
+                            autoFocus
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => { setTrackingModal({ orderId: '', show: false }); setTrackingNumber(''); }}
+                                className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={submitTracking}
+                                className="flex-1 px-4 py-3 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white rounded-xl font-medium hover:from-[#4338CA] hover:to-[#6D28D9] transition"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

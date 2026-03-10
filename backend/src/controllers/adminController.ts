@@ -20,11 +20,20 @@ export const getAdminOrders = async (req: Request, res: Response) => {
 export const updateOrderStatus = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { orderStatus, paymentStatus } = req.body;
+        const { orderStatus, paymentStatus, trackingNumber } = req.body;
+
+        if (orderStatus === 'shipped' && !trackingNumber) {
+            return res.status(400).json(errorResponse('Tracking number is required when status is shipped'));
+        }
+
+        const updateData: any = { orderStatus, paymentStatus };
+        if (trackingNumber) {
+            updateData.trackingNumber = trackingNumber;
+        }
 
         const order = await Order.findByIdAndUpdate(
             id,
-            { orderStatus, paymentStatus },
+            updateData,
             { new: true }
         );
 
