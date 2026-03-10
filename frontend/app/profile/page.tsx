@@ -84,8 +84,8 @@ export default function ProfilePage() {
       <main className="max-w-7xl mx-auto px-8 py-40">
         <div className="flex flex-col gap-16">
           {/* Header */}
-          <div className="relative p-12 md:p-16 rounded-[48px] bg-zinc-950 text-white overflow-hidden group">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-48 -mt-48 group-hover:bg-indigo-600/40 transition-colors duration-1000" />
+          <div className="relative p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] text-white overflow-hidden group">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48 group-hover:bg-white/20 transition-colors duration-1000" />
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 text-center md:text-left">
               <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center text-3xl font-black border border-white/20 shadow-2xl group-hover:rotate-6 transition-transform duration-500 overflow-hidden">
                 {user.image ? (
@@ -106,7 +106,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
             {/* Sidebar Navigation */}
-            <aside className="lg:col-span-3 space-y-12 p-10 rounded-[40px] bg-zinc-950 border border-white/5 shadow-2xl">
+            <aside className="lg:col-span-3 space-y-12 p-10 rounded-[40px] bg-white border border-gray-200 shadow-lg">
               <nav className="flex flex-col gap-2">
                 {[
                   { id: 'overview', label: 'Overview', icon: '📊' },
@@ -117,8 +117,8 @@ export default function ProfilePage() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`flex items-center gap-4 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === tab.id
-                      ? 'bg-white text-zinc-950 shadow-lg shadow-white/5 scale-[1.02]'
-                      : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                      ? 'bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white shadow-lg scale-[1.02]'
+                      : 'text-gray-600 hover:text-[#4F46E5] hover:bg-gray-50'
                       }`}
                   >
                     <span className="text-lg grayscale group-hover:grayscale-0">{tab.icon}</span>
@@ -127,7 +127,7 @@ export default function ProfilePage() {
                 ))}
               </nav>
 
-              <div className="h-px bg-zinc-100 w-full" />
+              <div className="h-px bg-gray-200 w-full" />
 
               <button
                 onClick={logout}
@@ -146,14 +146,14 @@ export default function ProfilePage() {
                 <div className="space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {[
-                      { label: 'Total Orders', value: stats.totalOrders, color: 'bg-zinc-950', icon: '📦' },
-                      { label: 'Total Spent', value: `৳${stats.totalSpent.toLocaleString()}`, color: 'bg-zinc-950', icon: '💎' },
-                      { label: 'Pending Orders', value: stats.pendingOrders, color: 'bg-zinc-950', icon: '⚡' }
+                      { label: 'Total Orders', value: stats.totalOrders, color: 'bg-gradient-to-br from-blue-50 to-indigo-50 border-indigo-200', icon: '📦' },
+                      { label: 'Total Spent', value: `৳${stats.totalSpent.toLocaleString()}`, color: 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200', icon: '💎' },
+                      { label: 'Pending Orders', value: stats.pendingOrders, color: 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200', icon: '⚡' }
                     ].map((s, i) => (
-                      <div key={i} className={`${s.color} p-10 rounded-[32px] border border-white/5 shadow-2xl hover:shadow-white/5 transition-all duration-500`}>
+                      <div key={i} className={`${s.color} p-10 rounded-[32px] border shadow-lg hover:shadow-xl transition-all duration-500`}>
                         <span className="text-3xl mb-4 block">{s.icon}</span>
-                        <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">{s.label}</p>
-                        <p className="text-3xl font-black text-white tabular-nums">{s.value}</p>
+                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">{s.label}</p>
+                        <p className="text-3xl font-black text-gray-900 tabular-nums">{s.value}</p>
                       </div>
                     ))}
                   </div>
@@ -161,7 +161,7 @@ export default function ProfilePage() {
                   <div>
                     <div className="flex items-center justify-between mb-10">
                       <h2 className="text-2xl font-black tracking-tight italic">Recent Orders.</h2>
-                      <button onClick={() => setActiveTab('orders')} className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">View All Orders</button>
+                      <button onClick={() => setActiveTab('orders')} className="text-[10px] font-black text-[#4F46E5] uppercase tracking-widest hover:underline">View All Orders</button>
                     </div>
 
                     {loading ? (
@@ -204,7 +204,7 @@ export default function ProfilePage() {
                     <div className="p-32 bg-zinc-50 rounded-[48px] text-center border-2 border-dashed border-zinc-100">
                       <span className="text-6xl mb-8 block grayscale opacity-30">📂</span>
                       <h3 className="text-xl font-black mb-4 italic">No orders yet.</h3>
-                      <Link href="/shop" className="inline-block px-10 py-5 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest">Start Shopping</Link>
+                      <Link href="/shop" className="inline-block px-10 py-5 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:from-[#4338CA] hover:to-[#6D28D9] transition-all">Start Shopping</Link>
                     </div>
                   ) : (
                     <div className="space-y-8">
@@ -286,7 +286,7 @@ export default function ProfilePage() {
                               </div>
                             )}
                           </div>
-                          <label className="absolute bottom-0 right-0 w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center cursor-pointer hover:bg-indigo-500 transition-all shadow-lg">
+                          <label className="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] rounded-xl flex items-center justify-center cursor-pointer hover:from-[#4338CA] hover:to-[#6D28D9] transition-all shadow-lg">
                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -348,14 +348,18 @@ export default function ProfilePage() {
                       <button
                         onClick={async () => {
                           try {
-                            await api.post('/auth/profile', { name: profileData.name, phone: profileData.phone, image: profileData.image });
-                            toast.success('Profile updated');
-                            window.location.reload();
+                            const response = await api.put('/auth/profile', { name: profileData.name, phone: profileData.phone, image: profileData.image });
+                            if (response.success) {
+                              toast.success('Profile updated');
+                              window.location.reload();
+                            } else {
+                              toast.error(response.error || 'Update failed');
+                            }
                           } catch (error) {
                             toast.error('Update failed');
                           }
                         }}
-                        className="w-full px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all"
+                        className="w-full px-10 py-5 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:from-[#4338CA] hover:to-[#6D28D9] transition-all"
                       >
                         Save Changes
                       </button>

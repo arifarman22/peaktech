@@ -17,6 +17,15 @@ const api = {
         });
         return res.json();
     },
+    put: async (endpoint: string, data: any) => {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
+            body: JSON.stringify(data),
+        });
+        return res.json();
+    },
     delete: async (endpoint: string) => {
         const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
         const res = await fetch(`${API_URL}${endpoint}`, {
