@@ -56,7 +56,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <Link href={`/products/${product.slug}`} className="group block">
             <div className="bg-white border border-[var(--color-border)] rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200">
                 {/* Image */}
-                <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                <div className="relative aspect-square bg-gradient-to-br from-indigo-50 to-purple-50 overflow-hidden">
                     <img
                         src={product.images[0]}
                         alt={product.name}
