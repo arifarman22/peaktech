@@ -10,6 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isInvoicePage = pathname?.includes('/invoice/');
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'admin')) {
@@ -38,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-screen bg-[var(--color-bg-card)]">
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-[var(--color-primary)] text-white transition-all duration-300 flex flex-col shadow-xl`}>
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-[var(--color-primary)] text-white transition-all duration-300 flex flex-col shadow-xl print:hidden`}>
         <div className="p-6 border-b border-white/10 flex items-center justify-between">
           {sidebarOpen && (
             <div className="flex items-center gap-3">
@@ -78,7 +79,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-[var(--color-border)] px-8 py-5 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        {!isInvoicePage && (
+          <header className="bg-white border-b border-[var(--color-border)] px-8 py-5 flex items-center justify-between sticky top-0 z-10 shadow-sm print:hidden">
           <h2 className="text-2xl font-bold text-[var(--color-primary)]">Admin Panel</h2>
           <div className="flex items-center gap-4">
             <span className="text-sm text-[var(--color-text-muted)] font-medium">Welcome, <span className="text-[var(--color-primary)] font-bold">{user.name}</span></span>
@@ -87,7 +89,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </div>
         </header>
-        <div className="p-8">{children}</div>
+        )}
+        <div className={isInvoicePage ? '' : 'p-8'}>{children}</div>
       </main>
     </div>
   );
