@@ -50,7 +50,7 @@ export default function EditProductPage() {
 
     const fetchProduct = async () => {
         try {
-            const data = await apiFetch(`/products/${params.id}`);
+            const data = await apiFetch(`/admin/products/${params.id}`);
             if (data.success) {
                 const p = data.data;
                 setFormData({
@@ -168,7 +168,7 @@ export default function EditProductPage() {
 
         setSubmitting(true);
         try {
-            const data = await apiFetch(`/products/${params.id}`, {
+            const data = await apiFetch(`/admin/products/${params.id}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     ...formData,
